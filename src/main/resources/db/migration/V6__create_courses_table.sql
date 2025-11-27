@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS courses(
+    id SERIAL  PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    creation_time DATE NOT NULL,
+    rate DOUBLE PRECISION NOT NULL,
+    price DOUBLE PRECISION NOT NULL,
+    watches INTEGER NOT NULL
+);

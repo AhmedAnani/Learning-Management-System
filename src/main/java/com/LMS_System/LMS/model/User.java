@@ -1,0 +1,53 @@
+package com.LMS_System.LMS.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+@Entity
+@Data
+@Table(name = "users")
+public class User extends BaseEntity{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+
+    private String first_name;
+
+
+    private String second_name;
+
+
+    private LocalDate birth_date;
+
+
+    private String email;
+
+
+    private String phone;
+
+
+    private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name="users_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+   private Set<Roles> roles;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_courses",
+            joinColumns =@JoinColumn(name = "users_id"),
+            inverseJoinColumns=@JoinColumn(name = "courses_id")
+    )
+    private Set<Course> courses;
+
+
+}

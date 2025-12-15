@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,11 @@ public class User extends BaseEntity{
 
     private String phone;
 
+    private String otp;
+
+    private LocalDateTime otpExpiration;
+
+    private boolean verified;
 
     private String password;
 

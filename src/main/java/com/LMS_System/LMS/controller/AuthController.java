@@ -1,13 +1,18 @@
 package com.LMS_System.LMS.controller;
 
 import com.LMS_System.LMS.DTO.ForgetPasswordDto;
+import com.LMS_System.LMS.DTO.LoginDto;
 import com.LMS_System.LMS.DTO.ResetPasswordDto;
 import com.LMS_System.LMS.DTO.VerifyOtpDto;
+import com.LMS_System.LMS.component.JwtUtil;
 import com.LMS_System.LMS.model.User;
+import com.LMS_System.LMS.repository.UserRepository;
 import com.LMS_System.LMS.service.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -17,13 +22,23 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
     @Autowired
-    private UserService service;
+    private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
+       try {
+           return userService.login(loginDto);
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
+    }
     @PostMapping("/register")
     public ResponseEntity<Map<String,String>> register(@RequestBody User user){
         try {
-            return service.register(user);
+            return userService.register(user);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -31,7 +46,7 @@ public class AuthController {
     @PostMapping("/verify")
     public ResponseEntity<Map<String,String>> verifyOtp(@RequestBody VerifyOtpDto verifyOtp){
         try {
-            return service.verifyOtp(verifyOtp.getEmail(), verifyOtp.getOtp());
+            return userService.verifyOtp(verifyOtp.getEmail(), verifyOtp.getOtp());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -39,7 +54,7 @@ public class AuthController {
     @PostMapping("/forget-password")
     public ResponseEntity<Map<String,String>> forgetPassword(@RequestBody ForgetPasswordDto forgetPassword){
         try {
-            return service.forgetPassword(forgetPassword.getEmail());
+            return userService.forgetPassword(forgetPassword.getEmail());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -47,7 +62,7 @@ public class AuthController {
     @PostMapping("/reset-password")
     public ResponseEntity<Map<String,String>> resetPassword(@RequestBody ResetPasswordDto resetPassword){
         try {
-            return service.resetPassword(resetPassword.getEmail(), resetPassword.getPassword(), resetPassword.getOtp());
+            return userService.resetPassword(resetPassword.getEmail(), resetPassword.getPassword(), resetPassword.getOtp());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

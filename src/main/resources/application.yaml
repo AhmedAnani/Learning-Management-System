@@ -1,6 +1,7 @@
 spring:
   application:
     name: LMS
+
   datasource:
     url: jdbc:postgresql://localhost:5432/LMS_System
     username: postgres
@@ -18,9 +19,11 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: yasuo5428@gmail.com
-    password: zbqs vioh guiz anba
+    password: "zbqs vioh guiz anba"
     properties:
       mail:
         smtp:
           auth: true
           starttls:
+            enable: true
+            required: true

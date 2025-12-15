@@ -1,5 +1,7 @@
 package com.LMS_System.LMS.service;
 
+import com.LMS_System.LMS.DTO.LoginDto;
+import com.LMS_System.LMS.component.JwtUtil;
 import com.LMS_System.LMS.model.User;
 import com.LMS_System.LMS.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,8 +25,12 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public ResponseEntity<Map<String,String>> register(User user){
         if(userRepo.findByEmail(user.getEmail())!=null){
@@ -62,7 +69,7 @@ public class UserService {
     @Transactional
     public ResponseEntity<Map<String,String>> forgetPassword(String email){
         User user=userRepo.findByEmail(email);
-        if(user!=null){
+        if(user==null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(Map.of("message","User not found"));
@@ -80,7 +87,7 @@ public class UserService {
     @Transactional
     public ResponseEntity<Map<String,String>> resetPassword(String email,String password,String otp){
         User user=userRepo.findByEmail(email);
-        if(user!=null){
+        if(user==null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(Map.of("message","User not found"));
@@ -95,9 +102,8 @@ public class UserService {
                     .status(HttpStatus.GATEWAY_TIMEOUT)
                     .body(Map.of("message","OTP expired"));
         }
-//        String hashedPassword = passwordEncoder.encode(password);
-//        user.setPassword(hashedPassword);
-        user.setPassword(password);
+       String hashedPassword = passwordEncoder.encode(password);
+       user.setPassword(hashedPassword);
         userRepo.save(user);
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
@@ -109,5 +115,26 @@ public class UserService {
         int otp=100000+new Random().nextInt(900000);
         return String.valueOf(otp);
     }
+    @Transactional
+    public ResponseEntity<?> login(LoginDto loginDto) {
+        String email= loginDto.getEmail();
+        String password= loginDto.getPassword();
 
+        User user= userRepo.findByEmail(email);
+        if(user==null||!passwordEncoder.matches(password, user.getPassword())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid email or password");
+        }
+
+        if(!user.isVerified()){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Account not verified");
+        }
+        String token= jwtUtil.generateToken(email);
+
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "type", "Bearer",
+                "expiresIn", 3600));
+    }
 }

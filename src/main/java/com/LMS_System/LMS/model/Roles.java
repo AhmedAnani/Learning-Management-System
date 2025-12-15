@@ -2,6 +2,7 @@ package com.LMS_System.LMS.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Columns;
 
 import java.util.Set;
 
@@ -11,18 +12,16 @@ import java.util.Set;
 public class Roles {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true,nullable = false)
+
+    @Column(nullable = false, unique = true)
     private String role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "roles_permissions",
-            joinColumns = @JoinColumn(name = "roles_id"),
-            inverseJoinColumns = @JoinColumn(name = "permissions_id")
+    @OneToMany(
+            mappedBy = "role",
+            cascade = CascadeType.ALL
     )
     private Set<Permission> permissions;
-
 }
+

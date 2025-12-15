@@ -11,10 +11,14 @@ import java.util.Set;
 public class Permission extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false)
     private String permission;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Roles role;
 
 }

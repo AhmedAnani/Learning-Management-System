@@ -7,4 +7,5 @@ CREATE TABLE IF NOT EXISTS sections(
     CONSTRAINT fk_contents_course
         FOREIGN KEY (courses_id) REFERENCES courses(id)
         ON DELETE CASCADE
+
 );

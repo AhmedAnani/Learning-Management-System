@@ -8,4 +8,5 @@ CREATE TABLE IF NOT EXISTS articles(
     CONSTRAINT fk_articles_content
         FOREIGN KEY (contents_id) REFERENCES contents(id)
         ON DELETE CASCADE
+
 );

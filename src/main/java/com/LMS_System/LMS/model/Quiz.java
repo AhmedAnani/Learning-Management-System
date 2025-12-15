@@ -24,4 +24,5 @@ public class Quiz extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "content_id")
     private Content contents;
+
 }

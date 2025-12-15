@@ -6,4 +6,5 @@ CREATE TABLE IF NOT EXISTS contents(
     CONSTRAINT fk_contents_section
         FOREIGN KEY (sections_id) REFERENCES sections(id)
         ON DELETE CASCADE
+
 );

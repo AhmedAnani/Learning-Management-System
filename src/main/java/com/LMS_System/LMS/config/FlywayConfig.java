@@ -13,5 +13,6 @@ public class FlywayConfig {
                 .dataSource("jdbc:postgresql://localhost:5432/LMS_System", "postgres", "1234")
                 .locations("classpath:db/migration")
                 .load();
+
     }
 }

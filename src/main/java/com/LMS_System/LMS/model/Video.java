@@ -24,4 +24,5 @@ public class Video extends BaseEntity{
     @JoinColumn(name = "content_id")
     private Content contents;
 
+
 }

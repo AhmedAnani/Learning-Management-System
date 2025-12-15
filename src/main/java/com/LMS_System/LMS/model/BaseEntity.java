@@ -9,8 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Data
-
 public class BaseEntity {
+
     @Column(name = "created_at",updatable = false)
     private LocalDateTime createdAt ;
 

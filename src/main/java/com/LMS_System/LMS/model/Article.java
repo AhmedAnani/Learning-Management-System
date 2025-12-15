@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "articles")
 public class Article extends BaseEntity{
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

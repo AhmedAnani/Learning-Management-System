@@ -25,4 +25,5 @@ public class Section extends BaseEntity {
     @OneToMany(mappedBy = "sections",cascade = CascadeType.ALL)
     private Set<Content> contents;
 
+
 }

@@ -7,5 +7,6 @@ public class VerifyOtpDto {
 
    private String email;
 
+
    private String otp;
 }

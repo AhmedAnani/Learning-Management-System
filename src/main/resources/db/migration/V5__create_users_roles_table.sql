@@ -11,4 +11,5 @@ CREATE TABLE IF NOT EXISTS users_roles(
     CONSTRAINT fk_users_roles_role
         FOREIGN KEY (roles_id) REFERENCES roles(id)
         ON DELETE CASCADE
+
 );

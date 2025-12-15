@@ -10,6 +10,7 @@ import java.util.Set;
 @Table(name = "contents")
 public class Content extends BaseEntity{
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

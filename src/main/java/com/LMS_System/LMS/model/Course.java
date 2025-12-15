@@ -21,9 +21,7 @@ public class Course extends BaseEntity {
 
     private String description;
 
-
     private String author;
-
 
     private LocalDate creation_time;
 

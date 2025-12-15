@@ -12,4 +12,5 @@ CREATE TABLE IF NOT EXISTS roles_permissions(
         FOREIGN KEY (permissions_id) REFERENCES permissions(id)
         ON DELETE CASCADE
 
+
 );

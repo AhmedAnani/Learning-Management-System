@@ -19,6 +19,7 @@ public class AuthController {
     @Autowired
     private UserService service;
 
+
     @PostMapping("/register")
     public ResponseEntity<Map<String,String>> register(@RequestBody User user){
         try {

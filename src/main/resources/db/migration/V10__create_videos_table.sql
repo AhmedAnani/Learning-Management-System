@@ -9,4 +9,5 @@ CREATE TABLE IF NOT EXISTS videos(
         FOREIGN KEY (contents_id) REFERENCES contents(id)
         ON DELETE CASCADE
 
+
 );

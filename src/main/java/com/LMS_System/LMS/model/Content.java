@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "contents")
-public class Content extends BaseEntity{
+public class Content extends Auditable {
 
 
     @Id

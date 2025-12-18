@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Table(name = "articles")
-public class Article extends BaseEntity{
+public class Article extends Auditable {
 
 
     @Id

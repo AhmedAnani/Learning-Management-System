@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Table(name = "videos")
-public class Video extends BaseEntity{
+public class Video extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

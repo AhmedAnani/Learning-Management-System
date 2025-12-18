@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "sections")
-public class Section extends BaseEntity {
+public class Section extends Auditable  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

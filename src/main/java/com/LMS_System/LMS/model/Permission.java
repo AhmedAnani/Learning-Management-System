@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "permissions")
-public class Permission extends BaseEntity {
+public class Permission extends Auditable  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

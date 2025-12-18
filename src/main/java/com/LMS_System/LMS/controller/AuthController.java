@@ -1,9 +1,6 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.ForgetPasswordDto;
-import com.LMS_System.LMS.DTO.LoginDto;
-import com.LMS_System.LMS.DTO.ResetPasswordDto;
-import com.LMS_System.LMS.DTO.VerifyOtpDto;
+import com.LMS_System.LMS.DTO.*;
 import com.LMS_System.LMS.component.JwtUtil;
 import com.LMS_System.LMS.model.User;
 import com.LMS_System.LMS.repository.UserRepository;
@@ -36,9 +33,9 @@ public class AuthController {
        }
     }
     @PostMapping("/register")
-    public ResponseEntity<Map<String,String>> register(@RequestBody User user){
+    public ResponseEntity<Map<String,String>> register(@RequestBody RegisterDto registerDto){
         try {
-            return userService.register(user);
+            return userService.register(registerDto);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

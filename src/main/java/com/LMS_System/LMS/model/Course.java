@@ -9,7 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "courses")
 @Data
-public class Course extends BaseEntity {
+public class Course extends Auditable  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

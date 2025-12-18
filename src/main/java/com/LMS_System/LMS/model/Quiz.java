@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "quizzes")
-public class Quiz extends BaseEntity {
+public class Quiz extends Auditable  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

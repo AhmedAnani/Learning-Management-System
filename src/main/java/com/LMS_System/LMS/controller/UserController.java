@@ -1,11 +1,13 @@
 package com.LMS_System.LMS.controller;
 
+import com.LMS_System.LMS.DTO.UserProfileDto;
+import com.LMS_System.LMS.service.UserService;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -13,10 +15,16 @@ import java.util.Map;
 @NoArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    @GetMapping
-    public ResponseEntity<Map<String,String>> profile(){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(Map.of("message","You are authenticated with JWT"));
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/profile")
+    public ResponseEntity<Map<String,?>> userprofile(Authentication authentication ){
+       try {
+           return userService.userProfile(authentication.getName());
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
     }
 }

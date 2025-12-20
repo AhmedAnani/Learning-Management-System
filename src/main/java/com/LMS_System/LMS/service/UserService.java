@@ -49,7 +49,7 @@ public class UserService {
 
         // 2. Check if user already exists
         User user = userRepo.findByEmail(registerDto.getEmail());
-        if (user != null) {
+         if (user != null) {
 
             // Optional: handle unverified users
             if (!user.isVerified()) {
@@ -90,6 +90,7 @@ public class UserService {
         User user=userRepo.findByEmail(email);
         if(user.getOtpExpiration().isBefore(LocalDateTime.now()) &&
                ! user.isVerified()){
+            sentOtp(user.getEmail());
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).
                     body(Map.of("message","Wil sent otp again"));
 

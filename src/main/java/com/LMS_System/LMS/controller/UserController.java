@@ -1,10 +1,9 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.UserProfileDto;
+
 import com.LMS_System.LMS.service.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/profile")
+    @GetMapping("/profile")
     public ResponseEntity<Map<String,?>> userprofile(Authentication authentication ){
        try {
            return userService.userProfile(authentication.getName());
@@ -27,4 +26,8 @@ public class UserController {
            throw new RuntimeException(e);
        }
     }
+
+
+
+
 }

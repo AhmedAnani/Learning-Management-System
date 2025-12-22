@@ -22,7 +22,7 @@ public class RoleService {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                     .body(Map.of("message","Can't be empty"));
         }
-        if(!roleRepository.existByRole(addRoleDto.getRole())){
+        if(!roleRepository.existsByRole(addRoleDto.getRole())){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                     .body(Map.of("message","Role already exist"));
         }

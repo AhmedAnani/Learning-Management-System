@@ -14,7 +14,7 @@ public interface CourseRepository extends JpaRepository<Course,Integer> {
 
     boolean existsByAuthor(String author);
 
-    boolean existById(int id);
+    boolean existsById(int id);
 
     boolean existsByName(String name);
 

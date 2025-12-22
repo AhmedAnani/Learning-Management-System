@@ -17,13 +17,13 @@ public class User extends Auditable {
     private Long id;
 
 
-    private String first_name;
+    private String firstName;
 
 
-    private String second_name;
+    private String secondName;
 
 
-    private LocalDate birth_date;
+    private LocalDate birthDate;
 
 
     private String email;

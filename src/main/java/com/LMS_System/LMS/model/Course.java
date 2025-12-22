@@ -23,7 +23,7 @@ public class Course extends Auditable  {
 
     private String author;
 
-    private LocalDate creation_time;
+    private LocalDate creationTime;
 
 
     private double Rate;

@@ -12,7 +12,7 @@ import java.util.Set;
 public class Roles extends Auditable  {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     @Column(nullable = false, unique = true)

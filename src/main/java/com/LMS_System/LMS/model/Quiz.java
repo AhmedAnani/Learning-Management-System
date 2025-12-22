@@ -19,7 +19,7 @@ public class Quiz extends Auditable  {
 
     private List<String> questions;
 
-    private LocalDate creation_time;
+    private LocalDate creationTime;
 
     @ManyToOne
     @JoinColumn(name = "content_id")

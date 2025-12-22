@@ -19,7 +19,7 @@ public class Article extends Auditable {
 
     private String description;
 
-    private LocalDate creation_time;
+    private LocalDate creationTime;
 
     @ManyToOne
     @JoinColumn(name = "content_id")

@@ -18,7 +18,7 @@ public class Video extends Auditable {
 
     private String path;
 
-    private LocalDate creation_time;
+    private LocalDate creationTime;
 
     @ManyToOne
     @JoinColumn(name = "content_id")

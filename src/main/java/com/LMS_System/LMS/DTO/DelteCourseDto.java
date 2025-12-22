@@ -1,0 +1,17 @@
+package com.LMS_System.LMS.DTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class DelteCourseDto {
+
+   private String courseName;
+
+   private String author;
+}

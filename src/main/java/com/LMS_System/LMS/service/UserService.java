@@ -7,6 +7,7 @@ import com.LMS_System.LMS.model.User;
 import com.LMS_System.LMS.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 @Service
 @NoArgsConstructor
@@ -33,6 +36,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 1. Add user
     @Transactional
     public ResponseEntity<Map<String, String>> register(RegisterDto registerDto) {
 
@@ -86,6 +90,7 @@ public class UserService {
                 .body(Map.of("message", "OTP sent to your email for verification"));
     }
 
+    // 2. Verify otp
     @Transactional
     public ResponseEntity<Map<String,String>> verifyOtp(String email,String otp){
         User user=userRepo.findByEmail(email);
@@ -113,6 +118,8 @@ public class UserService {
                 .status(HttpStatus.ACCEPTED)
                 .body(Map.of("message","Account verified successfully!"));
     }
+
+    // 3. Forget password
     @Transactional
     public ResponseEntity<Map<String,String>> forgetPassword(String email){
         User user=userRepo.findByEmail(email);
@@ -127,6 +134,8 @@ public class UserService {
                 .status(HttpStatus.CREATED)
                 .body(Map.of("message","OTP sent to your email for reset your password. "));
     }
+
+    // 4. Reset password
     @Transactional
     public ResponseEntity<Map<String,String>> resetPassword(String email,String password,String otp){
         User user=userRepo.findByEmail(email);
@@ -154,7 +163,7 @@ public class UserService {
     }
 
 
-
+    // 5. Login
     @Transactional
     public ResponseEntity<Map<String, ?>> login(LoginDto loginDto) {
 
@@ -203,7 +212,7 @@ public class UserService {
         );
     }
 
-
+    // 6. Get user profile
     @Transactional
     public ResponseEntity<Map<String,?>> userProfile(String email){
         User user=userRepo.findByEmail(email);
@@ -218,6 +227,24 @@ public class UserService {
                         ,"birthDate",user.getBirthDate()));
     }
 
+    // 7. Get all users
+    public List<User> getlAllUsers(){
+        return userRepo.findAll();
+    }
+    // Delete user by userId
+    public ResponseEntity<Map<String,String>> deleteUserByUserId(int id){
+        if(!userRepo.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message","User not found"));
+        }
+        User user=userRepo.findById(id);
+        userRepo.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message","User deleted successfully",
+                                "User email",user.getEmail()));
+    }
+
+    // 8. Send otp
     private void sentOtp(String email){
         User user = userRepo.findByEmail(email);
         String otp=generateOtp();
@@ -227,6 +254,7 @@ public class UserService {
         emailService.sendOtp(email,otp);
 
     }
+    // 9. Generate otp
     private String generateOtp(){
         int otp=100000+new Random().nextInt(900000);
         return String.valueOf(otp);

@@ -1,6 +1,6 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.DTO.AddPermission;
+import com.LMS_System.LMS.DTO.AddPermissionDto;
 import com.LMS_System.LMS.model.Permission;
 import com.LMS_System.LMS.repository.PremissionRepository;
 import lombok.NoArgsConstructor;
@@ -18,10 +18,10 @@ public class PremissionService {
     @Autowired
     private PremissionRepository premissionRepository;
 
-    public ResponseEntity<Map<String,String>> addPermission(AddPermission addPermissionpermission){
+    public ResponseEntity<Map<String,String>> addPermission(AddPermissionDto addPermissionDto){
        Permission permission=new Permission();
-       permission.setPermission(addPermissionpermission.getPermission());
-       permission.setRole(addPermissionpermission.getRole());
+       permission.setPermission(addPermissionDto.getPermission());
+       permission.setRole(addPermissionDto.getRole());
         premissionRepository.save(permission);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("message","Permission saved successfully to the role."));

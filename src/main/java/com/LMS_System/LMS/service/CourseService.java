@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 
@@ -20,12 +21,12 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
-    // Get all courses in site
+    // 1. Get all courses in site
     public ResponseEntity<Map<?,?>> getAllCourses(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("courses",courseRepository.findAll()));
     }
-    // Get all his courses for the author
+    // 2. Get my courses
     public ResponseEntity<Map<?,?>> getmycourses(String author){
         if(author==null||author.isBlank()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
@@ -34,37 +35,38 @@ public class CourseService {
          return ResponseEntity.status(HttpStatus.OK).body(Map.of("Your courses",courseRepository.findByAuthor(author)));
     }
 
-    // Add course
-    public ResponseEntity<Map<String,String>> addCourse(AddCourseDto addCourseDto){
-        if(addCourseDto==null){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(Map.of("message","Add Valid Data"));
-        }
+    // 3. Add course
+    public ResponseEntity<Map<String,String>> addCourse(String name, String author, String description, double price, LocalDate creationTime){
         Course course=new Course();
-        course.setName(addCourseDto.getName());
-        course.setAuthor(addCourseDto.getAuthor());
-        course.setPrice(addCourseDto.getPrice());
-        course.setDescription(addCourseDto.getDescription());
-        course.setCreationTime(addCourseDto.getCreation_time());
+        course.setName(name);
+        course.setAuthor(author);
+        course.setPrice(price);
+        course.setDescription(description);
+        course.setCreationTime(creationTime);
         courseRepository.save(course);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("Course name",course.getName(),"message","Course saved successfully"));
     }
 
-    // Delete course
-    public ResponseEntity<Map<String,String>> deleteCourse
-    (DeleteCourseDto deleteCourseDto){
-        if (!courseRepository.existsByName(deleteCourseDto.getCourseName()) ||
-                !courseRepository.existsByAuthor(deleteCourseDto.getAuthorName())) {
+    // 4. Delete course
+    public ResponseEntity<Map<String, String>> deleteCourse(
+            String courseName,
+            String author
+    ) {
+        Course course = courseRepository
+                .findByNameAndAuthor(courseName, author);
 
+        if (course == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("message", "Course not found or author mismatch"));
         }
 
-        courseRepository.deleteByName(deleteCourseDto.getCourseName());
+        courseRepository.delete(course);
 
         return ResponseEntity.ok(
                 Map.of("message", "Course deleted successfully")
         );
     }
+
+
 }

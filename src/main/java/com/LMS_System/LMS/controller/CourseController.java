@@ -2,6 +2,7 @@ package com.LMS_System.LMS.controller;
 
 import com.LMS_System.LMS.DTO.AddCourseDto;
 import com.LMS_System.LMS.DTO.DeleteCourseDto;
+import com.LMS_System.LMS.DTO.DelteCourseDto;
 import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.service.CourseService;
 import lombok.NoArgsConstructor;
@@ -15,44 +16,31 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/courses")
-@NoArgsConstructor
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<Map<?,?>> getAllCourses(){
-        try {
-            return courseService.getAllCourses();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Map<?, ?>> getAllCourses() {
+        return courseService.getAllCourses();
     }
+
     @GetMapping("/my")
-    public ResponseEntity<Map<?,?>> getCoursesByAuthorName(Authentication authentication){
-        try {
-           return courseService.getmycourses(authentication.getName());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Map<?, ?>> getCoursesByAuthorName(Authentication authentication) {
+        return courseService.getmycourses(authentication.getName());
     }
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> addCourse(@RequestBody AddCourseDto addCourseDto){
-        try {
-            return courseService.addCourse(addCourseDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Map<String, String>> addCourse(
+            @RequestBody AddCourseDto addCourseDto
+    ) {
+        return courseService.addCourse(addCourseDto.getName(),addCourseDto.getAuthor(),addCourseDto.getDescription(),addCourseDto.getPrice(),addCourseDto.getCreation_time());
     }
 
-    @DeleteMapping
-    public ResponseEntity<Map<String,String>> deleteCourse(@RequestBody DeleteCourseDto deleteCourseDto){
-        try {
-            return courseService.deleteCourse(deleteCourseDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> deleteCourse(
+            @RequestBody DelteCourseDto delteCourseDto) {
+        return courseService.deleteCourse(delteCourseDto.getCourseName(),delteCourseDto.getAuthor());
     }
 }

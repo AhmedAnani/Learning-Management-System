@@ -1,10 +1,13 @@
 package com.LMS_System.LMS.DTO;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterDto {
 
     private String first_name;

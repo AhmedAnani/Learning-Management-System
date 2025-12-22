@@ -19,19 +19,15 @@ public class RoleController {
 
     @PostMapping
     public ResponseEntity<Map<String,String>> addRole(@RequestBody AddRoleDto addRoleDto){
-        try {
+
             return roleService.saveRole(addRoleDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     @GetMapping
     public ResponseEntity<Map<String,?>> getAllRoles(){
-        try {
+
             return roleService.getAllRoles();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
     }
 }

@@ -12,19 +12,22 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-@NoArgsConstructor
 public class RoleService {
 
     @Autowired
     private RoleRepository roleRepository;
 
-    public ResponseEntity<Map<String,String>> saveRole(AddRoleDto saveRoleDto){
-        if(saveRoleDto.getRole().isBlank()){
+    public ResponseEntity<Map<String,String>> saveRole(AddRoleDto addRoleDto){
+        if(addRoleDto.getRole().isBlank()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                     .body(Map.of("message","Can't be empty"));
         }
+        if(!roleRepository.existByRole(addRoleDto.getRole())){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                    .body(Map.of("message","Role already exist"));
+        }
         Role role =new Role();
-        role.setRole(saveRoleDto.getRole());
+        role.setRole(addRoleDto.getRole());
         roleRepository.save(role);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("message","Role saved successfully"));
@@ -35,7 +38,6 @@ public class RoleService {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(Map.of("message","There's no roles"));
         }
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("All roles",roleRepository.findAll()));
     }

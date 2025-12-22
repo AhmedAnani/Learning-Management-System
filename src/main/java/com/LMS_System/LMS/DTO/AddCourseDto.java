@@ -14,8 +14,6 @@ public class AddCourseDto {
 
     private String description;
 
-    private String author;
-
     private LocalDate creation_time;
 
     private double price;

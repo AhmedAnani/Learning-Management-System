@@ -3,9 +3,12 @@ package com.LMS_System.LMS.service;
 import com.LMS_System.LMS.DTO.LoginDto;
 import com.LMS_System.LMS.DTO.RegisterDto;
 import com.LMS_System.LMS.component.JwtUtil;
+import com.LMS_System.LMS.model.Role;
 import com.LMS_System.LMS.model.User;
+import com.LMS_System.LMS.repository.RoleRepository;
 import com.LMS_System.LMS.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +24,13 @@ import java.util.Random;
 import java.util.Set;
 
 @Service
-@NoArgsConstructor
 public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private EmailService emailService;
@@ -74,7 +79,8 @@ public class UserService {
         newUser.setSecondName(registerDto.getSecond_name());
         newUser.setPhone(registerDto.getPhone());
         newUser.setBirthDate(registerDto.getBirth_date());
-
+        Role role=roleRepository.findById(1).orElseThrow(()->new RuntimeException("There's no role yet."));
+        newUser.setRole(role);
 
         // 4. Encrypt password
         newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));

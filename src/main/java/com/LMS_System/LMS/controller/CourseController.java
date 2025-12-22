@@ -28,14 +28,14 @@ public class CourseController {
 
     @GetMapping("/my")
     public ResponseEntity<Map<?, ?>> getCoursesByAuthorName(Authentication authentication) {
-        return courseService.getmycourses(authentication.getName());
+        return courseService.getMyCourses(authentication.getName());
     }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> addCourse(
-            @RequestBody AddCourseDto addCourseDto
+            @RequestBody AddCourseDto addCourseDto,Authentication authentication
     ) {
-        return courseService.addCourse(addCourseDto.getName(),addCourseDto.getAuthor(),addCourseDto.getDescription(),addCourseDto.getPrice(),addCourseDto.getCreation_time());
+        return courseService.addCourse(addCourseDto,authentication.getName()  );
     }
 
     @DeleteMapping("/delete")

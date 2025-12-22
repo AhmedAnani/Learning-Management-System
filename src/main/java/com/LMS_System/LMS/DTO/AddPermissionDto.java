@@ -11,6 +11,6 @@ public class AddPermissionDto {
 
     private String permission;
 
-    private Role role;
+    private int role;
 
 }

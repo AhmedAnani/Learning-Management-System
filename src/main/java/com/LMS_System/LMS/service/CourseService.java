@@ -27,7 +27,7 @@ public class CourseService {
                 .body(Map.of("courses",courseRepository.findAll()));
     }
     // 2. Get my courses
-    public ResponseEntity<Map<?,?>> getmycourses(String author){
+    public ResponseEntity<Map<?,?>> getMyCourses(String author){
         if(author==null||author.isBlank()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                     .body(Map.of("message","Not found"));
@@ -36,17 +36,27 @@ public class CourseService {
     }
 
     // 3. Add course
-    public ResponseEntity<Map<String,String>> addCourse(String name, String author, String description, double price, LocalDate creationTime){
-        Course course=new Course();
-        course.setName(name);
-        course.setAuthor(author);
-        course.setPrice(price);
-        course.setDescription(description);
-        course.setCreationTime(creationTime);
+    public ResponseEntity<Map<String, String>> addCourse(
+            AddCourseDto addCourseDto,
+            String authorEmail
+    ) {
+        Course course = new Course();
+        course.setName(addCourseDto.getName());
+        course.setDescription(addCourseDto.getDescription());
+        course.setPrice(addCourseDto.getPrice());
+        course.setCreationTime(LocalDate.now());
+
+        course.setAuthor(authorEmail);
+
         courseRepository.save(course);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("Course name",course.getName(),"message","Course saved successfully"));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "courseName", course.getName(),
+                        "message", "Course saved successfully"
+                ));
     }
+
 
     // 4. Delete course
     public ResponseEntity<Map<String, String>> deleteCourse(

@@ -1,32 +1,36 @@
 package com.LMS_System.LMS.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "contents")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Content extends Auditable {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "section_id")
-    private Section sections;
+    @JoinColumn(name = "section_id", nullable = false)
+    private Section section;
 
-    @OneToMany(mappedBy = "contents",cascade =  CascadeType.ALL)
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
     private Set<Video> videos;
 
-    @OneToMany(mappedBy = "contents",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "content",cascade = CascadeType.ALL)
     private Set<Article> articles;
 
-    @OneToMany(mappedBy = "contents",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "content",cascade = CascadeType.ALL)
     private Set<Quiz> quizzes;
 }

@@ -71,6 +71,7 @@ public class UserService {
         newUser.setPhone(registerDto.getPhone());
         newUser.setBirthDate(registerDto.getBirth_date());
 
+
         // 4. Encrypt password
         newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 

@@ -1,12 +1,13 @@
 package com.LMS_System.LMS.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-
-import java.util.Set;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "permissions")
 public class Permission extends Auditable  {
 
@@ -17,8 +18,8 @@ public class Permission extends Auditable  {
     @Column(nullable = false)
     private String permission;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
-    private Roles role;
+    private Role role;
 
 }

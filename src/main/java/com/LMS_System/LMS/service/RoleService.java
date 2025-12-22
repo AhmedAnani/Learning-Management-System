@@ -1,7 +1,7 @@
 package com.LMS_System.LMS.service;
 
 import com.LMS_System.LMS.DTO.AddRoleDto;
-import com.LMS_System.LMS.model.Roles;
+import com.LMS_System.LMS.model.Role;
 import com.LMS_System.LMS.repository.RoleRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class RoleService {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                     .body(Map.of("message","Can't be empty"));
         }
-        Roles role =new Roles();
+        Role role =new Role();
         role.setRole(saveRoleDto.getRole());
         roleRepository.save(role);
         return ResponseEntity.status(HttpStatus.OK)

@@ -66,10 +66,10 @@ public class UserService {
         // 3. Create new user
         User newUser = new User();
         newUser.setEmail(registerDto.getEmail());
-        newUser.setFirst_name(registerDto.getFirst_name());
-        newUser.setSecond_name(registerDto.getSecond_name());
+        newUser.setFirstName(registerDto.getFirst_name());
+        newUser.setSecondName(registerDto.getSecond_name());
         newUser.setPhone(registerDto.getPhone());
-        newUser.setBirth_date(registerDto.getBirth_date());
+        newUser.setBirthDate(registerDto.getBirth_date());
 
         // 4. Encrypt password
         newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
@@ -211,10 +211,10 @@ public class UserService {
                     .body(Map.of("message","User not found. Please create an account."));
         }
         return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("fullName", user.getFirst_name()+" "+user.getSecond_name()
+                .body(Map.of("fullName", user.getFirstName()+" "+user.getSecondName()
                         ,"email", user.getEmail()
                         ,"phone", user.getPhone()
-                        ,"birthDate",user.getBirth_date()));
+                        ,"birthDate",user.getBirthDate()));
     }
 
     private void sentOtp(String email){

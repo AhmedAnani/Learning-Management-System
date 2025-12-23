@@ -7,6 +7,7 @@ import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.service.CourseService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,11 @@ public class CourseController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<Map<?, ?>> getCoursesByAuthorName(Authentication authentication) {
-        return courseService.getMyCourses(authentication.getName());
+    public ResponseEntity<Map<String, ?>> getCoursesByAuthorName(Authentication authentication) {
+        if(authentication!=null){return courseService.getMyCourses(authentication.getName());}
+        return  ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("message","asdfasfs"));
+
     }
 
     @PostMapping

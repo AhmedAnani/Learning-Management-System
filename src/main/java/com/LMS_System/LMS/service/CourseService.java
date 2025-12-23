@@ -27,7 +27,7 @@ public class CourseService {
                 .body(Map.of("courses",courseRepository.findAll()));
     }
     // 2. Get my courses
-    public ResponseEntity<Map<?,?>> getMyCourses(String author){
+    public ResponseEntity<Map<String,?>> getMyCourses(String author){
         if(author==null||author.isBlank()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                     .body(Map.of("message","Not found"));

@@ -1,6 +1,7 @@
 package com.LMS_System.LMS.service;
 
 import com.LMS_System.LMS.DTO.AddSectionDto;
+import com.LMS_System.LMS.DTO.GetCourseSectionsDto;
 import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.model.Section;
 import com.LMS_System.LMS.repository.CourseRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,5 +39,13 @@ public class SectionService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("message","Section added successfully.",
                                 "Course name:", course.getName()));
+    }
+
+    public List<?> getSectionOfCourse(GetCourseSectionsDto getCourseSectionsDto){
+        List<Section> sections =sectionRepository.findByCourseId(getCourseSectionsDto.getCourseId());
+        if(sections==null){
+            return List.of("Not found");
+        }
+        return sectionRepository.findByCourseId(getCourseSectionsDto.getCourseId());
     }
 }

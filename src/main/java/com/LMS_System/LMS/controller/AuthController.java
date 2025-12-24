@@ -1,13 +1,9 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.*;
-import com.LMS_System.LMS.component.JwtUtil;
-import com.LMS_System.LMS.model.User;
-import com.LMS_System.LMS.repository.UserRepository;
+import com.LMS_System.LMS.dto.auth.*;
 import com.LMS_System.LMS.service.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;

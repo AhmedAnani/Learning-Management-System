@@ -1,8 +1,8 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.AddContentDto;
-import com.LMS_System.LMS.DTO.GetAllContentDto;
-import com.LMS_System.LMS.DTO.GetContentDto;
+import com.LMS_System.LMS.dto.content.AddContentDto;
+import com.LMS_System.LMS.dto.content.GetAllContentDto;
+import com.LMS_System.LMS.dto.content.GetContentDto;
 import com.LMS_System.LMS.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

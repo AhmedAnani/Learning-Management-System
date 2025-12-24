@@ -1,16 +1,13 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.DTO.LoginDto;
-import com.LMS_System.LMS.DTO.RegisterDto;
+import com.LMS_System.LMS.dto.auth.LoginDto;
+import com.LMS_System.LMS.dto.auth.RegisterDto;
 import com.LMS_System.LMS.component.JwtUtil;
 import com.LMS_System.LMS.model.Role;
 import com.LMS_System.LMS.model.User;
 import com.LMS_System.LMS.repository.RoleRepository;
 import com.LMS_System.LMS.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 @Service
 public class UserService {

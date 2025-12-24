@@ -1,26 +1,17 @@
-package com.LMS_System.LMS.DTO;
+package com.LMS_System.LMS.dto.content;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddArticleDto {
-
+public class AddContentDto {
 
     private String name;
 
-
-    private String description;
-
-
-    private LocalDate creationTime;
-
-    private int contentId;
+    private int sectionId;
 }

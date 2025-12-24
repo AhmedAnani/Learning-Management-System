@@ -1,6 +1,6 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.AddRoleDto;
+import com.LMS_System.LMS.dto.role.AddRoleDto;
 import com.LMS_System.LMS.service.RoleService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

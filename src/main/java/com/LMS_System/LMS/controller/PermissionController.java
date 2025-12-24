@@ -1,6 +1,6 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.AddPermissionDto;
+import com.LMS_System.LMS.dto.permission.AddPermissionDto;
 import com.LMS_System.LMS.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

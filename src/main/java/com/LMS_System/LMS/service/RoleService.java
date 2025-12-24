@@ -1,9 +1,8 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.DTO.AddRoleDto;
+import com.LMS_System.LMS.dto.role.AddRoleDto;
 import com.LMS_System.LMS.model.Role;
 import com.LMS_System.LMS.repository.RoleRepository;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.DTO.AddPermissionDto;
+import com.LMS_System.LMS.dto.permission.AddPermissionDto;
 import com.LMS_System.LMS.model.Permission;
 import com.LMS_System.LMS.model.Role;
 import com.LMS_System.LMS.repository.PremissionRepository;

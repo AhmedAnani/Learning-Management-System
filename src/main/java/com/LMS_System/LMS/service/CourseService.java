@@ -1,7 +1,6 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.DTO.AddCourseDto;
-import com.LMS_System.LMS.DTO.DeleteCourseDto;
+import com.LMS_System.LMS.dto.course.AddCourseDto;
 import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.repository.CourseRepository;
 import lombok.NoArgsConstructor;

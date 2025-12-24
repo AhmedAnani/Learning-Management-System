@@ -1,4 +1,4 @@
-package com.LMS_System.LMS.DTO;
+package com.LMS_System.LMS.dto.course;
 
 import lombok.*;
 

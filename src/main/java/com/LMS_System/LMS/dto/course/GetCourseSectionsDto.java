@@ -1,4 +1,4 @@
-package com.LMS_System.LMS.DTO;
+package com.LMS_System.LMS.dto.course;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DelteCourseDto {
+public class GetCourseSectionsDto {
 
-   private String courseName;
-
-   private String author;
+    private int courseId;
 }

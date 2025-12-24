@@ -1,7 +1,7 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.AddSectionDto;
-import com.LMS_System.LMS.DTO.GetCourseSectionsDto;
+import com.LMS_System.LMS.dto.section.AddSectionDto;
+import com.LMS_System.LMS.dto.course.GetCourseSectionsDto;
 import com.LMS_System.LMS.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

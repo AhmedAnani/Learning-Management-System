@@ -1,4 +1,4 @@
-package com.LMS_System.LMS.DTO;
+package com.LMS_System.LMS.dto.auth;
 
 import lombok.*;
 
@@ -6,7 +6,8 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileDto {
+public class ForgetPasswordDto {
+
 
     private String email;
 }

@@ -1,6 +1,5 @@
-package com.LMS_System.LMS.DTO;
+package com.LMS_System.LMS.dto.permission;
 
-import com.LMS_System.LMS.model.Role;
 import lombok.*;
 
 @Getter

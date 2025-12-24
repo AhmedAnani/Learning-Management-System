@@ -1,7 +1,7 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.DTO.AddSectionDto;
-import com.LMS_System.LMS.DTO.GetCourseSectionsDto;
+import com.LMS_System.LMS.dto.section.AddSectionDto;
+import com.LMS_System.LMS.dto.course.GetCourseSectionsDto;
 import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.model.Section;
 import com.LMS_System.LMS.repository.CourseRepository;
@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class SectionService {

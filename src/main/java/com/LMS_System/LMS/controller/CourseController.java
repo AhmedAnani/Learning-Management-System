@@ -1,11 +1,8 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.DTO.AddCourseDto;
-import com.LMS_System.LMS.DTO.DeleteCourseDto;
-import com.LMS_System.LMS.DTO.DelteCourseDto;
-import com.LMS_System.LMS.model.Course;
+import com.LMS_System.LMS.dto.course.AddCourseDto;
+import com.LMS_System.LMS.dto.course.DelteCourseDto;
 import com.LMS_System.LMS.service.CourseService;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/courses")

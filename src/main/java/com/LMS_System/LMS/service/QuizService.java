@@ -1,9 +1,12 @@
 package com.LMS_System.LMS.service;
 
 import com.LMS_System.LMS.dto.quiz.AddQuizDto;
+import com.LMS_System.LMS.dto.quiz.DeleteQuizDto;
 import com.LMS_System.LMS.dto.quiz.GetQuizDto;
+import com.LMS_System.LMS.dto.video.DeleteVideoDto;
 import com.LMS_System.LMS.model.Content;
 import com.LMS_System.LMS.model.Quiz;
+import com.LMS_System.LMS.model.Video;
 import com.LMS_System.LMS.repository.ContentRepository;
 import com.LMS_System.LMS.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +56,17 @@ public class QuizService {
         }
 
         return List.of(quiz);
+    }
+    // 3. Delete quiz
+    public ResponseEntity<Map<String,String>> deleteQuiz(DeleteQuizDto deleteQuizDto){
+        Quiz quiz=quizRepository.findById(deleteQuizDto.getQuizId()).orElse(null);
+        if (quiz==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message","Quiz not found."));
+        }
+        quizRepository.save(quiz);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message","Quiz deleted successfully."));
+
     }
 }

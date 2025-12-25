@@ -1,6 +1,7 @@
 package com.LMS_System.LMS.service;
 
 import com.LMS_System.LMS.dto.content.AddContentDto;
+import com.LMS_System.LMS.dto.content.DeleteContentDto;
 import com.LMS_System.LMS.dto.content.GetAllContentDto;
 import com.LMS_System.LMS.dto.content.GetContentDto;
 import com.LMS_System.LMS.model.Content;
@@ -56,5 +57,17 @@ public class ContentService {
         }
 
         return List.of(section.getContents());
+    }
+
+    public ResponseEntity<Map<String,String>> deleteContent(DeleteContentDto deleteContentDto){
+
+        Content content= contentRepository.findById(deleteContentDto.getContentId()).orElse(null);
+        if (content==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message","Content not found."));
+        }
+        contentRepository.delete(content);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message","Content deleted successfully."));
     }
 }

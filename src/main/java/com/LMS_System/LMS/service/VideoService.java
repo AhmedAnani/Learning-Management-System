@@ -1,6 +1,7 @@
 package com.LMS_System.LMS.service;
 
 import com.LMS_System.LMS.dto.video.AddVideoDto;
+import com.LMS_System.LMS.dto.video.DeleteVideoDto;
 import com.LMS_System.LMS.dto.video.GetVideoDto;
 import com.LMS_System.LMS.model.Content;
 import com.LMS_System.LMS.model.Video;
@@ -53,5 +54,18 @@ public class VideoService {
         }
 
         return List.of(video);
+    }
+
+    // 3. Delete video
+    public ResponseEntity<Map<String,String>> deleteVideo(DeleteVideoDto deleteVideoDto){
+        Video video=videoRepository.findById(deleteVideoDto.getVideoId()).orElse(null);
+        if (video==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message","Video not found."));
+        }
+        videoRepository.save(video);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message","Video deleted successfully."));
+
     }
 }

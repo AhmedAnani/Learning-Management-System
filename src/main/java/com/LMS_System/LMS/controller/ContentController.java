@@ -1,6 +1,7 @@
 package com.LMS_System.LMS.controller;
 
 import com.LMS_System.LMS.dto.content.AddContentDto;
+import com.LMS_System.LMS.dto.content.DeleteContentDto;
 import com.LMS_System.LMS.dto.content.GetAllContentDto;
 import com.LMS_System.LMS.dto.content.GetContentDto;
 import com.LMS_System.LMS.service.ContentService;
@@ -31,5 +32,10 @@ public class ContentController {
     @GetMapping("/all")
     public List<?> getAllContent(@RequestBody GetAllContentDto getAllContentDto){
         return contentService.getAllContentBySectionId(getAllContentDto);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String,String>> deleteContent(@RequestBody DeleteContentDto deleteContentDto){
+        return contentService.deleteContent(deleteContentDto);
     }
 }

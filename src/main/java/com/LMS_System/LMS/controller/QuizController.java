@@ -1,6 +1,7 @@
 package com.LMS_System.LMS.controller;
 
 import com.LMS_System.LMS.dto.quiz.AddQuizDto;
+import com.LMS_System.LMS.dto.quiz.DeleteQuizDto;
 import com.LMS_System.LMS.dto.quiz.GetQuizDto;
 import com.LMS_System.LMS.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,10 @@ public class QuizController {
     @GetMapping
     private List<?> getQuiz(@RequestBody GetQuizDto getQuizDto){
         return quizService.getQuiz(getQuizDto);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String,String>> deleteQuiz(@RequestBody DeleteQuizDto deleteQuizDto){
+        return quizService.deleteQuiz(deleteQuizDto);
     }
 }

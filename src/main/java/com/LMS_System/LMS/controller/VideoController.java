@@ -1,6 +1,7 @@
 package com.LMS_System.LMS.controller;
 
 import com.LMS_System.LMS.dto.video.AddVideoDto;
+import com.LMS_System.LMS.dto.video.DeleteVideoDto;
 import com.LMS_System.LMS.dto.video.GetVideoDto;
 import com.LMS_System.LMS.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,10 @@ public class VideoController {
     @GetMapping
     public List<?> getVideo(@RequestBody GetVideoDto getVideoDto){
         return videoService.getVideo(getVideoDto);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String,String>> deleteVideo(@RequestBody DeleteVideoDto deleteVideoDto){
+        return videoService.deleteVideo(deleteVideoDto);
     }
 }

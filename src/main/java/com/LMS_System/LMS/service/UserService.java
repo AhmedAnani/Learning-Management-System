@@ -1,9 +1,17 @@
 package com.LMS_System.LMS.service;
 
+import com.LMS_System.LMS.dto.GetUserResponseDto;
+import com.LMS_System.LMS.dto.user.UserProfileDto;
+import com.LMS_System.LMS.exception.ConflictHandling;
+import com.LMS_System.LMS.exception.GateWayTimeOut;
+import com.LMS_System.LMS.exception.NotAcceptable;
+import com.LMS_System.LMS.exception.NotFound;
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.auth.LoginDto;
 import com.LMS_System.LMS.dto.auth.RegisterDto;
 import com.LMS_System.LMS.component.JwtUtil;
-import com.LMS_System.LMS.model.Role;
+import com.LMS_System.LMS.dto.auth.ResetPasswordDto;
+import com.LMS_System.LMS.dto.auth.VerifyOtpDto;
 import com.LMS_System.LMS.model.User;
 import com.LMS_System.LMS.repository.RoleRepository;
 import com.LMS_System.LMS.repository.UserRepository;
@@ -39,33 +47,28 @@ public class UserService {
 
     // 1. Add user
     @Transactional
-    public ResponseEntity<Map<String, String>> register(RegisterDto registerDto) {
+    public ResponseDto register (RegisterDto registerDto) {
 
         // 1. Validate input
         if (registerDto.getEmail() == null || registerDto.getEmail().isBlank()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "Email is required"));
+            throw  new ConflictHandling("Enter valid email");
         }
 
         if (registerDto.getPassword() == null || registerDto.getPassword().length() < 8) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "Password must be at least 8 characters"));
+            throw  new ConflictHandling("Password must be at least 8 characters");
         }
 
         // 2. Check if user already exists
         User user = userRepo.findByEmail(registerDto.getEmail());
          if (user != null) {
 
-            // Optional: handle unverified users
-            if (!user.isVerified()) {
-               sentOtp(registerDto.getEmail());
-
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(Map.of("message", "OTP resent to your email"));
+            //  handle unverified users
+            if (!user.isVerified()&&user.getOtpExpiration().isBefore(LocalDateTime.now())) {
+                    sentOtp(registerDto.getEmail());
+                    throw  new GateWayTimeOut("Verification OTP resent to your email");
             }
 
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "You already have an account"));
+            throw  new ConflictHandling("You already have an account");
         }
 
         // 3. Create new user
@@ -75,8 +78,6 @@ public class UserService {
         newUser.setSecondName(registerDto.getSecond_name());
         newUser.setPhone(registerDto.getPhone());
         newUser.setBirthDate(registerDto.getBirth_date());
-        Role role=roleRepository.findById(1).orElseThrow(()->new RuntimeException("There's no role yet."));
-        newUser.setRole(role);
 
         // 4. Encrypt password
         newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
@@ -88,80 +89,60 @@ public class UserService {
         sentOtp(registerDto.getEmail());
 
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "OTP sent to your email for verification"));
+        return new ResponseDto( "OTP sent to your email for verification");
     }
 
     // 2. Verify otp
     @Transactional
-    public ResponseEntity<Map<String,String>> verifyOtp(String email,String otp){
-        User user=userRepo.findByEmail(email);
+    public ResponseDto verifyOtp(VerifyOtpDto verifyOtpDto){
+        User user=userRepo.findByEmail(verifyOtpDto.getEmail());
         if(user.getOtpExpiration().isBefore(LocalDateTime.now()) &&
                ! user.isVerified()){
             sentOtp(user.getEmail());
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).
-                    body(Map.of("message","Wil sent otp again"));
+            throw new GateWayTimeOut("Wil sent otp again");
 
         }
         if(user.isVerified()) {
-            return ResponseEntity
-                    .status(HttpStatus.GATEWAY_TIMEOUT)
-                    .body(Map.of("message", "Already verified"));
+            throw new GateWayTimeOut("Already verified");
         }
-        if(!user.getOtp().equals(otp)){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(Map.of("message","Invalid OTP"));
+        if(!user.getOtp().equals(verifyOtpDto.getOtp())){
+            throw new NotAcceptable("Invalid OTP");
         }
         user.setVerified(true);
         user.setOtp(null);
         userRepo.save(user);
-        return ResponseEntity
-                .status(HttpStatus.ACCEPTED)
-                .body(Map.of("message","Account verified successfully!"));
+        return new ResponseDto("Account verified successfully.");
     }
 
     // 3. Forget password
     @Transactional
-    public ResponseEntity<Map<String,String>> forgetPassword(String email){
+    public ResponseDto forgetPassword(String email){
         User user=userRepo.findByEmail(email);
         if(user==null){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","User not found"));
+            throw new NotFound("User not found");
         }
 
         sentOtp(email);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(Map.of("message","OTP sent to your email for reset your password. "));
+        return new ResponseDto("OTP sent to your email for reset your password. ");
     }
 
     // 4. Reset password
     @Transactional
-    public ResponseEntity<Map<String,String>> resetPassword(String email,String password,String otp){
-        User user=userRepo.findByEmail(email);
+    public ResponseDto resetPassword (ResetPasswordDto resetPasswordDto){
+        User user=userRepo.findByEmail((resetPasswordDto.getEmail()));
         if(user==null){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","User not found"));
+            throw new NotFound("User not found");
         }
-        if(!user.getOtp().equals(otp)){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(Map.of("message","Invalid OTP"));
+        if(!user.getOtp().equals(resetPasswordDto.getOtp())){
+            throw new NotAcceptable("Invalid OTP");
         }
         if(user.getOtpExpiration().isBefore(LocalDateTime.now())) {
-            return ResponseEntity
-                    .status(HttpStatus.GATEWAY_TIMEOUT)
-                    .body(Map.of("message","OTP expired"));
+            throw new GateWayTimeOut("OTP expired");
         }
-        String hashedPassword = passwordEncoder.encode(password);
+        String hashedPassword = passwordEncoder.encode(resetPasswordDto.getPassword());
         user.setPassword(hashedPassword);
         userRepo.save(user);
-        return ResponseEntity
-                .status(HttpStatus.ACCEPTED)
-                .body(Map.of("message","Password reset successfully."));
+        return new ResponseDto("Password reset successfully.");
     }
 
 
@@ -216,34 +197,37 @@ public class UserService {
 
     // 6. Get user profile
     @Transactional
-    public ResponseEntity<Map<String,?>> userProfile(String email){
+    public GetUserResponseDto userProfile(String email){
         User user=userRepo.findByEmail(email);
         if (user==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","User not found. Please create an account."));
+            throw new NotFound("User not found. Please create an account.");
         }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("fullName", user.getFirstName()+" "+user.getSecondName()
-                        ,"email", user.getEmail()
-                        ,"phone", user.getPhone()
-                        ,"birthDate",user.getBirthDate()));
+        return new GetUserResponseDto( user.getFirstName()
+                        ,user.getSecondName()
+                        , user.getEmail()
+                        , user.getPhone()
+                        ,user.getBirthDate());
     }
 
     // 7. Get all users
-    public List<User> getlAllUsers(){
-        return userRepo.findAll();
+    public List<GetUserResponseDto> getlAllUsers(){
+        return userRepo.findAll()
+                .stream()
+                .map(user -> new GetUserResponseDto(user.getFirstName()
+                        ,user.getSecondName()
+                        , user.getEmail()
+                        , user.getPhone()
+                        ,user.getBirthDate()
+                )).toList();
     }
-    // Delete user by userId
-    public ResponseEntity<Map<String,String>> deleteUserByUserId(int id){
-        if(!userRepo.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","User not found"));
+    // Delete user by userEmail
+    public ResponseDto deleteUserByEmail(UserProfileDto userProfileDto){
+        User user=userRepo.findByEmail(userProfileDto.getEmail());
+        if(user==null) {
+            throw new NotFound("User not found");
         }
-        User user=userRepo.findById(id);
-        userRepo.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message","User deleted successfully",
-                                "User email",user.getEmail()));
+        userRepo.deleteById(user.getId());
+        return new ResponseDto("User deleted successfully");
     }
 
     // 8. Send otp

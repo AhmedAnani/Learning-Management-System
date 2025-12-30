@@ -1,10 +1,12 @@
 package com.LMS_System.LMS.controller;
 
 
+import com.LMS_System.LMS.dto.GetUserResponseDto;
 import com.LMS_System.LMS.model.User;
 import com.LMS_System.LMS.service.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -21,21 +23,18 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/profile")
-    public ResponseEntity<Map<String,?>> userprofile(Authentication authentication ){
-       try {
-           return userService.userProfile(authentication.getName());
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
+    public ResponseEntity<Map<String, GetUserResponseDto>> userprofile(Authentication authentication ){
+        GetUserResponseDto responseDto=userService.userProfile(authentication.getName());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("profile:",responseDto));
     }
 
     @GetMapping("/allUsers")
-    public List<User> getAllUsers(){
-        try {
-            return userService.getlAllUsers();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<List<GetUserResponseDto>> getAllUsers(){
+
+            return ResponseEntity.ok(userService.getlAllUsers());
+
     }
 
 

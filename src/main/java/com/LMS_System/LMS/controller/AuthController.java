@@ -1,9 +1,13 @@
 package com.LMS_System.LMS.controller;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.auth.*;
+import com.LMS_System.LMS.dto.user.UserProfileDto;
 import com.LMS_System.LMS.service.UserService;
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,44 +25,45 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
-       try {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto){
+
            return userService.login(loginDto);
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
+
     }
     @PostMapping("/register")
-    public ResponseEntity<Map<String,String>> register(@RequestBody RegisterDto registerDto){
-        try {
-            return userService.register(registerDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Map<String, ResponseDto>> register(@Valid @RequestBody RegisterDto registerDto){
+
+            ResponseDto registerResponseDto= userService.register(registerDto);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Map.of("message",registerResponseDto));
+
     }
     @PostMapping("/verify")
-    public ResponseEntity<Map<String,String>> verifyOtp(@RequestBody VerifyOtpDto verifyOtp){
-        try {
-            return userService.verifyOtp(verifyOtp.getEmail(), verifyOtp.getOtp());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Map<String, ResponseDto>> verifyOtp(@Valid @RequestBody VerifyOtpDto verifyOtp){
+
+            ResponseDto responseDto = userService.verifyOtp(verifyOtp);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message",responseDto));
     }
     @PostMapping("/forget-password")
-    public ResponseEntity<Map<String,String>> forgetPassword(@RequestBody ForgetPasswordDto forgetPassword){
-        try {
-            return userService.forgetPassword(forgetPassword.getEmail());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Map<String,ResponseDto>> forgetPassword(@Valid @RequestBody ForgetPasswordDto forgetPassword){
+       ResponseDto responseDto= userService.forgetPassword(forgetPassword.getEmail());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message",responseDto));
     }
     @PostMapping("/reset-password")
-    public ResponseEntity<Map<String,String>> resetPassword(@RequestBody ResetPasswordDto resetPassword){
-        try {
-            return userService.resetPassword(resetPassword.getEmail(), resetPassword.getPassword(), resetPassword.getOtp());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Map<String,ResponseDto>> resetPassword(@Valid @RequestBody ResetPasswordDto resetPassword){
+
+            ResponseDto responseDto= userService.resetPassword(resetPassword);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message",responseDto));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String,ResponseDto>> deleteUser(@Valid @RequestBody UserProfileDto userProfileDto){
+        ResponseDto responseDto= userService.deleteUserByEmail(userProfileDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message",responseDto));
     }
 
 }

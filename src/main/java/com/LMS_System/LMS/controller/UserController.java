@@ -1,8 +1,7 @@
 package com.LMS_System.LMS.controller;
 
 
-import com.LMS_System.LMS.dto.GetUserResponseDto;
-import com.LMS_System.LMS.model.User;
+import com.LMS_System.LMS.dto.user.GetUserResponseDto;
 import com.LMS_System.LMS.service.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.dto.GetUserResponseDto;
+import com.LMS_System.LMS.dto.user.GetUserResponseDto;
 import com.LMS_System.LMS.dto.user.UserProfileDto;
 import com.LMS_System.LMS.exception.ConflictHandling;
 import com.LMS_System.LMS.exception.GateWayTimeOut;

@@ -4,8 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDate;
+
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class AddCourseDto {
     @NotBlank

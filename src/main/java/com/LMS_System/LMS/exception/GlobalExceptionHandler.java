@@ -45,4 +45,12 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_ACCEPTABLE)
                 .body(Map.of("message", e.getMessage()));
     }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String, String>> handelBadRequest(
+            BadRequestException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", e.getMessage()));
+    }
 }

@@ -1,25 +1,26 @@
 package com.LMS_System.LMS.dto.course;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
-public class AddCourseDto {
-    @NotBlank
+public class GetCourseResponseDto {
     private String name;
 
-    @NotBlank
     private String author;
 
-    @NotBlank
     private String description;
 
-    @NotBlank
     private LocalDate creation_time;
 
-    @NotBlank
     private double price;
+
+    private double Rate;
+
+    private int watches;
 }

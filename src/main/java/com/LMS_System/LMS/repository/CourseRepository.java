@@ -1,5 +1,6 @@
 package com.LMS_System.LMS.repository;
 
+import com.LMS_System.LMS.dto.course.GetCourseResponseDto;
 import com.LMS_System.LMS.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 

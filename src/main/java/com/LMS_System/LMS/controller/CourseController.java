@@ -1,15 +1,17 @@
 package com.LMS_System.LMS.controller;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.course.AddCourseDto;
-import com.LMS_System.LMS.dto.course.DelteCourseDto;
+import com.LMS_System.LMS.dto.course.DeleteCourseDto;
+import com.LMS_System.LMS.dto.course.GetCourseDto;
+import com.LMS_System.LMS.dto.course.GetCourseResponseDto;
 import com.LMS_System.LMS.service.CourseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/courses")
@@ -19,28 +21,29 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<Map<?, ?>> getAllCourses() {
-        return courseService.getAllCourses();
+    public ResponseEntity<List<GetCourseResponseDto>> getAllCourses() {
+
+        return ResponseEntity.ok(courseService.getAllCourses());
     }
 
     @GetMapping("/my")
-    public ResponseEntity<Map<String, ?>> getCoursesByAuthorName(Authentication authentication) {
-        if(authentication!=null){return courseService.getMyCourses(authentication.getName());}
-        return  ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Map.of("message","asdfasfs"));
+    public ResponseEntity< List<GetCourseResponseDto>> getCoursesByAuthorName(GetCourseDto getCourseDto) {
+
+        return  ResponseEntity.ok(courseService.getMyCourses(getCourseDto));
 
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> addCourse(
-            @RequestBody AddCourseDto addCourseDto,Authentication authentication
-    ) {
-        return courseService.addCourse(addCourseDto,authentication.getName()  );
+    public ResponseEntity< ResponseDto> addCourse(
+           @Valid @RequestBody AddCourseDto addCourseDto) {
+
+        return ResponseEntity.ok(courseService.addCourse(addCourseDto));
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, String>> deleteCourse(
-            @RequestBody DelteCourseDto delteCourseDto) {
-        return courseService.deleteCourse(delteCourseDto.getCourseName(),delteCourseDto.getAuthor());
+    public ResponseEntity<ResponseDto> deleteCourse(
+           @Valid @RequestBody DeleteCourseDto deleteCourseDto) {
+
+        return ResponseEntity.ok(courseService.deleteCourse(deleteCourseDto));
     }
 }

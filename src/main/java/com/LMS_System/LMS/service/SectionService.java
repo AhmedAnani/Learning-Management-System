@@ -1,7 +1,7 @@
 package com.LMS_System.LMS.service;
 
 import com.LMS_System.LMS.dto.section.AddSectionDto;
-import com.LMS_System.LMS.dto.course.GetCourseSectionsDto;
+import com.LMS_System.LMS.dto.section.GetCourseSectionsDto;
 import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.model.Section;
 import com.LMS_System.LMS.repository.CourseRepository;

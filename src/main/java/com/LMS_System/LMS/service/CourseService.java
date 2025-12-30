@@ -1,6 +1,12 @@
 package com.LMS_System.LMS.service;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.course.AddCourseDto;
+import com.LMS_System.LMS.dto.course.DeleteCourseDto;
+import com.LMS_System.LMS.dto.course.GetCourseDto;
+import com.LMS_System.LMS.dto.course.GetCourseResponseDto;
+import com.LMS_System.LMS.exception.BadRequestException;
+import com.LMS_System.LMS.exception.NotFound;
 import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.repository.CourseRepository;
 import lombok.NoArgsConstructor;
@@ -10,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,60 +28,61 @@ public class CourseService {
     private CourseRepository courseRepository;
 
     // 1. Get all courses in site
-    public ResponseEntity<Map<?,?>> getAllCourses(){
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("courses",courseRepository.findAll()));
+    public List<GetCourseResponseDto> getAllCourses(){
+         return courseRepository.findAll().stream().map(course -> new GetCourseResponseDto(course.getName()
+         ,course.getAuthor()
+         ,course.getDescription()
+         ,course.getCreationTime()
+         ,course.getPrice()
+         ,course.getRate()
+         ,course.getWatches())).toList();
     }
     // 2. Get my courses
-    public ResponseEntity<Map<String,?>> getMyCourses(String author){
-        if(author==null||author.isBlank()){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(Map.of("message","Not found"));
+    public List<GetCourseResponseDto> getMyCourses(GetCourseDto getCourseDto){
+        if(getCourseDto.getAuthor()==null||getCourseDto.getAuthor().isBlank()){
+            throw new BadRequestException("Author must not be empty");
         }
-         return ResponseEntity.status(HttpStatus.OK).body(Map.of("Your courses",courseRepository.findByAuthor(author)));
+
+        List<Course> courses =courseRepository.findByAuthor(getCourseDto.getAuthor());
+         return courses.stream().map(course -> new GetCourseResponseDto(course.getName(),
+                 course.getAuthor(),
+                 course.getDescription(),
+                 course.getCreationTime(),
+                 course.getPrice(),
+                 course.getRate(),
+                 course.getWatches())).toList();
     }
 
     // 3. Add course
-    public ResponseEntity<Map<String, String>> addCourse(
-            AddCourseDto addCourseDto,
-            String authorEmail
-    ) {
+    public ResponseDto addCourse(
+            AddCourseDto addCourseDto) {
         Course course = new Course();
         course.setName(addCourseDto.getName());
         course.setDescription(addCourseDto.getDescription());
         course.setPrice(addCourseDto.getPrice());
         course.setCreationTime(LocalDate.now());
-
-        course.setAuthor(authorEmail);
+        course.setAuthor(addCourseDto.getAuthor());
 
         courseRepository.save(course);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of(
-                        "courseName", course.getName(),
-                        "message", "Course saved successfully"
-                ));
+        return new ResponseDto( "Course saved successfully");
     }
 
 
     // 4. Delete course
-    public ResponseEntity<Map<String, String>> deleteCourse(
-            String courseName,
-            String author
-    ) {
+    public ResponseDto deleteCourse(DeleteCourseDto deleteCourseDto)
+    {
         Course course = courseRepository
-                .findByNameAndAuthor(courseName, author);
+                .findByNameAndAuthor(deleteCourseDto.getCourseName(), deleteCourseDto.getAuthorName());
 
         if (course == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message", "Course not found or author mismatch"));
+            throw new NotFound( "Course not found or author mismatch");
         }
 
         courseRepository.delete(course);
 
-        return ResponseEntity.ok(
-                Map.of("message", "Course deleted successfully")
-        );
+        return new ResponseDto("Course deleted successfully");
+
     }
 
 

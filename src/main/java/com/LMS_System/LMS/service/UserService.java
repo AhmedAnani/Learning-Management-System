@@ -49,20 +49,11 @@ public class UserService {
     @Transactional
     public ResponseDto register (RegisterDto registerDto) {
 
-        // 1. Validate input
-        if (registerDto.getEmail() == null || registerDto.getEmail().isBlank()) {
-            throw  new ConflictHandling("Enter valid email");
-        }
 
-        if (registerDto.getPassword() == null || registerDto.getPassword().length() < 8) {
-            throw  new ConflictHandling("Password must be at least 8 characters");
-        }
-
-        // 2. Check if user already exists
         User user = userRepo.findByEmail(registerDto.getEmail());
          if (user != null) {
 
-            //  handle unverified users
+
             if (!user.isVerified()&&user.getOtpExpiration().isBefore(LocalDateTime.now())) {
                     sentOtp(registerDto.getEmail());
                     throw  new GateWayTimeOut("Verification OTP resent to your email");
@@ -71,23 +62,17 @@ public class UserService {
             throw  new ConflictHandling("You already have an account");
         }
 
-        // 3. Create new user
+
         User newUser = new User();
         newUser.setEmail(registerDto.getEmail());
         newUser.setFirstName(registerDto.getFirst_name());
         newUser.setSecondName(registerDto.getSecond_name());
         newUser.setPhone(registerDto.getPhone());
         newUser.setBirthDate(registerDto.getBirth_date());
-
-        // 4. Encrypt password
         newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
-        // 5. Save user
         userRepo.save(newUser);
-
-        // 6.sent otp
         sentOtp(registerDto.getEmail());
-
 
         return new ResponseDto( "OTP sent to your email for verification");
     }
@@ -115,7 +100,7 @@ public class UserService {
     }
 
     // 3. Forget password
-    @Transactional
+
     public ResponseDto forgetPassword(String email){
         User user=userRepo.findByEmail(email);
         if(user==null){
@@ -127,7 +112,7 @@ public class UserService {
     }
 
     // 4. Reset password
-    @Transactional
+
     public ResponseDto resetPassword (ResetPasswordDto resetPasswordDto){
         User user=userRepo.findByEmail((resetPasswordDto.getEmail()));
         if(user==null){
@@ -147,7 +132,7 @@ public class UserService {
 
 
     // 5. Login
-    @Transactional
+
     public ResponseEntity<Map<String, ?>> login(LoginDto loginDto) {
 
         // 1. Basic validation
@@ -196,7 +181,7 @@ public class UserService {
     }
 
     // 6. Get user profile
-    @Transactional
+
     public GetUserResponseDto userProfile(String email){
         User user=userRepo.findByEmail(email);
         if (user==null){
@@ -210,7 +195,7 @@ public class UserService {
     }
 
     // 7. Get all users
-    public List<GetUserResponseDto> getlAllUsers(){
+    public List<GetUserResponseDto> getAllUsers(){
         return userRepo.findAll()
                 .stream()
                 .map(user -> new GetUserResponseDto(user.getFirstName()

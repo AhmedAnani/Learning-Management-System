@@ -1,5 +1,6 @@
-package com.LMS_System.LMS.dto.quiz;
+package com.LMS_System.LMS.dto.section;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteQuizDto {
+public class SectionsRequestDto {
 
-    private int quizId;
+    @NotBlank
+    private int courseId;
 }

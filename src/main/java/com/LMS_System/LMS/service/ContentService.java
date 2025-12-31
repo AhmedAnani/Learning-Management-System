@@ -1,20 +1,20 @@
 package com.LMS_System.LMS.service;
 
-import com.LMS_System.LMS.dto.content.AddContentDto;
-import com.LMS_System.LMS.dto.content.DeleteContentDto;
-import com.LMS_System.LMS.dto.content.GetAllContentDto;
-import com.LMS_System.LMS.dto.content.GetContentDto;
+import com.LMS_System.LMS.dto.ResponseDto;
+import com.LMS_System.LMS.dto.article.ArticleResponseDto;
+import com.LMS_System.LMS.dto.content.*;
+import com.LMS_System.LMS.dto.quiz.QuizResponseDto;
+import com.LMS_System.LMS.dto.video.VideoResponseDto;
+import com.LMS_System.LMS.exception.NotFound;
 import com.LMS_System.LMS.model.Content;
 import com.LMS_System.LMS.model.Section;
 import com.LMS_System.LMS.repository.ContentRepository;
 import com.LMS_System.LMS.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ContentService {
@@ -24,50 +24,99 @@ public class ContentService {
 
     @Autowired
     private SectionRepository sectionRepository;
-    public ResponseEntity<Map<String,String>> addContent(AddContentDto addContentDto){
+    public ResponseDto addContent(AddContentDto addContentDto){
         Section section=sectionRepository.findById(addContentDto.getSectionId()).orElse(null);
         if (section==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Section not found"));
+            throw new NotFound("Section not found");
         }
         Content content=new Content();
         content.setName(addContentDto.getName());
         content.setSection(section);
         contentRepository.save(content);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message","Saved successfully."));
+        return new ResponseDto("Saved successfully.");
     }
 
-    public List<?> getContentById(GetContentDto getContentDto){
-            Content content=contentRepository.findById(getContentDto.getContentId()).orElse(null);
-            if(content==null){
-                return List.of(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("message","Content not found")));
-            }
+    public ContentResponseDto getContentById(GetContentDto getContentDto){
+            Content content=contentRepository.findById(getContentDto.getContentId()).orElseThrow(()->new NotFound("Content not found"));
 
-        return List.of(content);
+
+        return new ContentResponseDto(content.getId(),
+                                        content.getName(),
+                                        content.getSection().getId(),
+                                        content.getVideos()
+                                                .stream()
+                                                .map(v -> new VideoResponseDto(
+                                                        v.getId(),
+                                                        v.getPath(),
+                                                        v.getName()
+                                                ))
+                                                .collect(Collectors.toSet()),
+                                        content.getArticles()
+                                                .stream()
+                                                .map(a -> new ArticleResponseDto(
+                                                        a.getId(),
+                                                        a.getName(),
+                                                        a.getDescription(),
+                                                        a.getCreationTime()
+                                                ))
+                                                .collect(Collectors.toSet()),
+                                        content.getQuizzes()
+                                                .stream()
+                                                .map(q -> new QuizResponseDto(
+                                                        q.getId(),
+                                                        q.getName(),
+                                                        q.getQuestions(),
+                                                        q.getCreationTime()
+                                                ))
+                                                .collect(Collectors.toSet()));
 
     }
 
-    public List<?> getAllContentBySectionId(GetAllContentDto getAllContentDto){
-        Section section=sectionRepository.findById(getAllContentDto.getSectionId()).orElse(null);
-        if(section==null){
-            return List.of(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Section not found")));
-        }
+    public Set<ContentResponseDto> getAllContentBySectionId(GetAllContentDto getAllContentDto){
+        Section section=sectionRepository.findById(getAllContentDto.getSectionId()).orElseThrow(()->new NotFound("Content not found"));
 
-        return List.of(section.getContents());
+
+        return section.getContents()
+                .stream()
+                .map(content -> new ContentResponseDto(
+                        content.getId(),
+                        content.getName(),
+                        section.getId(),
+                        content.getVideos()
+                                .stream()
+                                .map(v -> new VideoResponseDto(
+                                        v.getId(),
+                                        v.getPath(),
+                                        v.getName()
+                                ))
+                                .collect(Collectors.toSet()),
+                        content.getArticles()
+                                .stream()
+                                .map(a -> new ArticleResponseDto(
+                                        a.getId(),
+                                        a.getName(),
+                                        a.getDescription(),
+                                        a.getCreationTime()
+                                ))
+                                .collect(Collectors.toSet()),
+                        content.getQuizzes()
+                                .stream()
+                                .map(q -> new QuizResponseDto(
+                                        q.getId(),
+                                        q.getName(),
+                                        q.getQuestions(),
+                                        q.getCreationTime()
+                                ))
+                                .collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toSet());
     }
 
-    public ResponseEntity<Map<String,String>> deleteContent(DeleteContentDto deleteContentDto){
+    public ResponseDto deleteContent(GetContentDto getContentDto){
 
-        Content content= contentRepository.findById(deleteContentDto.getContentId()).orElse(null);
-        if (content==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Content not found."));
-        }
+        Content content= contentRepository.findById(getContentDto.getContentId()).orElseThrow(()->new NotFound("Content not found"));
+
         contentRepository.delete(content);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message","Content deleted successfully."));
+        return new ResponseDto("Content deleted successfully.");
     }
 }

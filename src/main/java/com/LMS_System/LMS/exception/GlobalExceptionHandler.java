@@ -19,6 +19,15 @@ public class GlobalExceptionHandler {
                 .body(Map.of("message", e.getMessage()));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleException(
+            Exception e) {
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("message", e.getMessage()));
+    }
+
     @ExceptionHandler(NotFound.class)
     public ResponseEntity<Map<String, String>> handleNotFound(
             NotFound e) {

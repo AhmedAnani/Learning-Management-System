@@ -1,16 +1,20 @@
-package com.LMS_System.LMS.dto.content;
+package com.LMS_System.LMS.dto.video;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Getter
 @Setter
 @NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class DeleteContentDto {
+public class VideoResponseDto {
 
-    private int contentId;
+    private int id;
+
+    private String title;
+
+    private String path;
+
 }

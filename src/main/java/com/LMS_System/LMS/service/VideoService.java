@@ -1,8 +1,10 @@
 package com.LMS_System.LMS.service;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.video.AddVideoDto;
-import com.LMS_System.LMS.dto.video.DeleteVideoDto;
 import com.LMS_System.LMS.dto.video.GetVideoDto;
+import com.LMS_System.LMS.dto.video.VideoResponseDto;
+import com.LMS_System.LMS.exception.NotFound;
 import com.LMS_System.LMS.model.Content;
 import com.LMS_System.LMS.model.Video;
 import com.LMS_System.LMS.repository.ContentRepository;
@@ -25,14 +27,10 @@ public class VideoService {
     private ContentRepository contentRepository;
 
     // 1. Add video
-    public ResponseEntity<Map<String,String>>  addVideo(AddVideoDto addVideoDto){
+    public ResponseDto addVideo(AddVideoDto addVideoDto){
 
-        Content content=contentRepository.findById(addVideoDto.getContentId()).orElse(null);
+        Content content=contentRepository.findById(addVideoDto.getContentId()).orElseThrow(()->new NotFound("Content not fond"));
 
-        if (content==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Content not found."));
-        }
         Video video= new Video();
         video.setPath(addVideoDto.getPath());
         video.setName(addVideoDto.getName());
@@ -40,32 +38,25 @@ public class VideoService {
         video.setContent(content);
         videoRepository.save(video);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message","Video saved successfully."));
+        return new ResponseDto("Video saved successfully.");
     }
 
     // 2. Get video
-    public List<?> getVideo(GetVideoDto getVideoDto){
-        Video video=videoRepository.findById(getVideoDto.getVideoId()).orElse(null);
+    public VideoResponseDto getVideo(GetVideoDto getVideoDto){
+        Video video=videoRepository.findById(getVideoDto.getVideoId()).orElseThrow(()->new NotFound("Video not fond"));
 
-        if (video==null){
-             return List.of(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Video not found.")));
-        }
 
-        return List.of(video);
+        return new VideoResponseDto(video.getId(),
+                video.getName(),
+                video.getPath());
     }
 
     // 3. Delete video
-    public ResponseEntity<Map<String,String>> deleteVideo(DeleteVideoDto deleteVideoDto){
-        Video video=videoRepository.findById(deleteVideoDto.getVideoId()).orElse(null);
-        if (video==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Video not found."));
-        }
-        videoRepository.save(video);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message","Video deleted successfully."));
+    public ResponseDto deleteVideo(GetVideoDto getVideoDto){
+        Video video=videoRepository.findById(getVideoDto.getVideoId()).orElseThrow(()->new NotFound("Video not fond"));
+
+        videoRepository.delete(video);
+        return new ResponseDto("Video deleted successfully.");
 
     }
 }

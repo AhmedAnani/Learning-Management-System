@@ -1,6 +1,5 @@
 package com.LMS_System.LMS.dto.article;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,19 +9,16 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class AddArticleDto {
+@NoArgsConstructor
+public class ArticleResponseDto {
 
-    @NotBlank
+    private Long id;
+
     private String name;
 
-    @NotBlank
     private String description;
 
-    @NotBlank
     private LocalDate creationTime;
 
-    @NotBlank
-    private int contentId;
 }

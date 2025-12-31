@@ -1,7 +1,10 @@
 package com.LMS_System.LMS.service;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.article.AddArticleDto;
+import com.LMS_System.LMS.dto.article.ArticleResponseDto;
 import com.LMS_System.LMS.dto.article.GetArticleDto;
+import com.LMS_System.LMS.exception.NotFound;
 import com.LMS_System.LMS.model.Article;
 import com.LMS_System.LMS.model.Content;
 import com.LMS_System.LMS.repository.ArticleRepository;
@@ -23,13 +26,9 @@ public class ArticleService {
     @Autowired
     private ContentRepository contentRepository;
 
-    public ResponseEntity<Map<String,String>> addArticle(AddArticleDto addArticleDto){
-        Content content=contentRepository.findById(addArticleDto.getContentId()).orElse(null);
+    public ResponseDto addArticle(AddArticleDto addArticleDto){
+        Content content=contentRepository.findById(addArticleDto.getContentId()).orElseThrow(()->new NotFound("Content not found"));
 
-        if(content==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Content not found."));
-        }
         Article article=new Article();
         article.setDescription(addArticleDto.getDescription());
         article.setName(addArticleDto.getName());
@@ -37,20 +36,24 @@ public class ArticleService {
         article.setContent(content);
         articleRepository.save(article);
 
-        return  ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message","Added successfully."));
+        return  new ResponseDto("Added successfully.");
     }
 
-    public List<?> getArticle(GetArticleDto getArticleDto){
+    public ArticleResponseDto getArticle(GetArticleDto getArticleDto){
 
-        Article article=articleRepository.findById(getArticleDto.getArticleId()).orElse(null);
-        if(article==null) {
-            return List.of(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message","Content not found.")));
-        }
+        Article article=articleRepository.findById(getArticleDto.getArticleId()).orElseThrow(()->new NotFound("Content not found"));
 
-        return List.of(ResponseEntity.status(HttpStatus.OK)
-                .body(article));
+        return new ArticleResponseDto(  article.getId(),
+                                        article.getName(),
+                                        article.getDescription(),
+                                        article.getCreationTime());
+    }
+
+    public ResponseDto deleteArticle(GetArticleDto getArticleDto){
+        Article article=articleRepository.findById(getArticleDto.getArticleId()).orElseThrow(()->new NotFound("Content not found"));
+
+        articleRepository.delete(article);
+        return new ResponseDto("Article deleted successfully");
     }
 
 }

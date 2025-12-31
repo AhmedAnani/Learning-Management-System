@@ -1,4 +1,4 @@
-package com.LMS_System.LMS.dto.section;
+package com.LMS_System.LMS.dto.content;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetCourseSectionsDto {
+public class ContentDto {
 
-    private int courseId;
+    private int id;
+    private String name;
 }

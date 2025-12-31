@@ -1,9 +1,11 @@
 package com.LMS_System.LMS.controller;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.video.AddVideoDto;
-import com.LMS_System.LMS.dto.video.DeleteVideoDto;
 import com.LMS_System.LMS.dto.video.GetVideoDto;
+import com.LMS_System.LMS.dto.video.VideoResponseDto;
 import com.LMS_System.LMS.service.VideoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +21,18 @@ public class VideoController {
     private VideoService videoService;
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> addVideo(@RequestBody AddVideoDto addVideoDto){
-        return videoService.addVideo(addVideoDto);
+    public ResponseEntity<ResponseDto> addVideo(@Valid @RequestBody AddVideoDto addVideoDto){
+
+        return ResponseEntity.ok(videoService.addVideo(addVideoDto));
     }
 
     @GetMapping
-    public List<?> getVideo(@RequestBody GetVideoDto getVideoDto){
-        return videoService.getVideo(getVideoDto);
+    public ResponseEntity<VideoResponseDto> getVideo(@Valid @RequestBody GetVideoDto getVideoDto){
+        return ResponseEntity.ok(videoService.getVideo(getVideoDto));
     }
 
     @DeleteMapping
-    public ResponseEntity<Map<String,String>> deleteVideo(@RequestBody DeleteVideoDto deleteVideoDto){
-        return videoService.deleteVideo(deleteVideoDto);
+    public ResponseEntity<ResponseDto> deleteVideo(@Valid @RequestBody GetVideoDto getVideoDto){
+        return ResponseEntity.ok(videoService.deleteVideo(getVideoDto));
     }
 }

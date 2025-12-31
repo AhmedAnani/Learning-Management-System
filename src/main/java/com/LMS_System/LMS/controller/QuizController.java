@@ -1,15 +1,14 @@
 package com.LMS_System.LMS.controller;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.quiz.AddQuizDto;
-import com.LMS_System.LMS.dto.quiz.DeleteQuizDto;
 import com.LMS_System.LMS.dto.quiz.GetQuizDto;
+import com.LMS_System.LMS.dto.quiz.QuizResponseDto;
 import com.LMS_System.LMS.service.QuizService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/quiz")
@@ -19,17 +18,19 @@ public class QuizController {
     private QuizService quizService;
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> addQuiz(@RequestBody AddQuizDto addQuizDto){
-        return quizService.addQuiz(addQuizDto);
+    public ResponseEntity<ResponseDto> addQuiz(@Valid @RequestBody AddQuizDto addQuizDto){
+
+        return ResponseEntity.ok(quizService.addQuiz(addQuizDto));
     }
 
     @GetMapping
-    private List<?> getQuiz(@RequestBody GetQuizDto getQuizDto){
-        return quizService.getQuiz(getQuizDto);
+    private ResponseEntity<QuizResponseDto> getQuiz(@Valid @RequestBody GetQuizDto getQuizDto){
+        return ResponseEntity.ok(quizService.getQuiz(getQuizDto));
     }
 
     @DeleteMapping
-    public ResponseEntity<Map<String,String>> deleteQuiz(@RequestBody DeleteQuizDto deleteQuizDto){
-        return quizService.deleteQuiz(deleteQuizDto);
+    public ResponseEntity<ResponseDto> deleteQuiz(@RequestBody GetQuizDto getQuizDto){
+
+        return ResponseEntity.ok(quizService.deleteQuiz(getQuizDto));
     }
 }

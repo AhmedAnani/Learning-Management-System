@@ -1,16 +1,15 @@
 package com.LMS_System.LMS.controller;
 
-import com.LMS_System.LMS.dto.content.AddContentDto;
-import com.LMS_System.LMS.dto.content.DeleteContentDto;
-import com.LMS_System.LMS.dto.content.GetAllContentDto;
-import com.LMS_System.LMS.dto.content.GetContentDto;
+import com.LMS_System.LMS.dto.ResponseDto;
+import com.LMS_System.LMS.dto.content.*;
 import com.LMS_System.LMS.service.ContentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/content")
@@ -20,22 +19,23 @@ public class ContentController {
     private ContentService contentService;
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> addContent(@RequestBody AddContentDto addContentDto){
-        return contentService.addContent(addContentDto);
+    public ResponseEntity< ResponseDto> addContent(@Valid @RequestBody AddContentDto addContentDto){
+        return ResponseEntity.ok(contentService.addContent(addContentDto));
     }
 
     @GetMapping
-    public List<?> getContent(@RequestBody GetContentDto getContentDto){
-        return contentService.getContentById(getContentDto);
+    public ResponseEntity<ContentResponseDto> getContent(@Valid @RequestBody GetContentDto getContentDto){
+        return ResponseEntity.ok(contentService.getContentById(getContentDto));
     }
 
     @GetMapping("/all")
-    public List<?> getAllContent(@RequestBody GetAllContentDto getAllContentDto){
-        return contentService.getAllContentBySectionId(getAllContentDto);
+    public ResponseEntity<Set<ContentResponseDto>> getAllContent(@Valid @RequestBody GetAllContentDto getAllContentDto){
+        return ResponseEntity.ok(contentService.getAllContentBySectionId(getAllContentDto));
     }
 
     @DeleteMapping
-    public ResponseEntity<Map<String,String>> deleteContent(@RequestBody DeleteContentDto deleteContentDto){
-        return contentService.deleteContent(deleteContentDto);
+    public ResponseEntity<ResponseDto> deleteContent(@Valid @RequestBody GetContentDto getContentDto){
+
+        return ResponseEntity.ok(contentService.deleteContent(getContentDto));
     }
 }

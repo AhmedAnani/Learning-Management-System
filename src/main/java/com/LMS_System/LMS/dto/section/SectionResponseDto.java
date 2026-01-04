@@ -1,8 +1,7 @@
 package com.LMS_System.LMS.dto.section;
 
-import com.LMS_System.LMS.dto.content.ContentResponseDto;
-import com.LMS_System.LMS.model.Content;
-import jakarta.validation.constraints.NotBlank;
+import com.LMS_System.LMS.dto.content.ContentBasicResponseDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +24,5 @@ public class SectionResponseDto {
 
     private int courseId;
 
-    private Set<ContentResponseDto> contents;
+    private Set<ContentBasicResponseDto> contents;
 }

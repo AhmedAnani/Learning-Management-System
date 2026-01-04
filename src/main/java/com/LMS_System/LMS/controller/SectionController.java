@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/section")
@@ -33,7 +34,7 @@ public class SectionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<SectionResponseDto>> getAllSections(@Valid @RequestBody SectionsRequestDto sectionsRequestDto){
+    public ResponseEntity<Set<SectionResponseDto>> getAllSections(@Valid @RequestBody SectionsRequestDto sectionsRequestDto){
 
         return ResponseEntity.ok(sectionService.getAllSectionsCourse(sectionsRequestDto));
     }

@@ -1,23 +1,19 @@
 package com.LMS_System.LMS.service;
 
 import com.LMS_System.LMS.dto.ResponseDto;
-import com.LMS_System.LMS.dto.content.ContentDto;
-import com.LMS_System.LMS.dto.content.ContentResponseDto;
+import com.LMS_System.LMS.dto.content.ContentBasicResponseDto;
 import com.LMS_System.LMS.dto.section.AddSectionDto;
 import com.LMS_System.LMS.dto.section.SectionRequestDto;
 import com.LMS_System.LMS.dto.section.SectionsRequestDto;
 import com.LMS_System.LMS.dto.section.SectionResponseDto;
-import com.LMS_System.LMS.exception.NotAcceptable;
 import com.LMS_System.LMS.exception.NotFound;
 import com.LMS_System.LMS.model.Course;
 import com.LMS_System.LMS.model.Section;
 import com.LMS_System.LMS.repository.CourseRepository;
 import com.LMS_System.LMS.repository.SectionRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +45,7 @@ public class SectionService {
                 section.getDescription(),
                 section.getCourse().getId(),
 
-                section.getContents().stream().map(content -> new ContentDto(
+                section.getContents().stream().map(content -> new ContentBasicResponseDto(
                                 content.getId(),
                                 content.getName()
                         ))
@@ -57,13 +53,13 @@ public class SectionService {
         );
     }
 
-    public List<SectionResponseDto> getAllSectionsCourse(SectionsRequestDto getCourseSectionsDto){
-            List<Section> sections=sectionRepository.findByCourseId(getCourseSectionsDto.getCourseId());
+    public Set<SectionResponseDto> getAllSectionsCourse(SectionsRequestDto getCourseSectionsDto){
+            Set<Section> sections=sectionRepository.findByCourseId(getCourseSectionsDto.getCourseId());
         return sections.stream().map(section -> new SectionResponseDto(section.getId(),section.getName(),
                                                 section.getDescription()
                                                 ,section.getCourse().getId()
-                                                ,section.getContents().stream().map(c->new ContentDto(c.getId()
-                                                ,c.getName())).collect(Collectors.toSet())));
+                                                ,section.getContents().stream().map(content->new ContentBasicResponseDto(content.getId()
+                                                ,content.getName())).collect(Collectors.toSet()))).collect(Collectors.toSet());
     }
 
     public ResponseDto deleteSection( SectionRequestDto sectionRequestDto) {

@@ -1,18 +1,17 @@
 package com.LMS_System.LMS.dto.permission;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddPermissionDto {
-
+public class GetPermissionDto {
     @NotBlank
-    private String permission;
-
-    @NotBlank
-    private int role;
+    private int id;
 
 }

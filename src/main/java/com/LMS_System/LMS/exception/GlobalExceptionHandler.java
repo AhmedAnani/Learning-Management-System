@@ -62,4 +62,23 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", e.getMessage()));
     }
+
+    @ExceptionHandler(UnAuthorized.class)
+    public ResponseEntity<Map<String, String>> handelUnAuthorized(
+            UnAuthorized e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", e.getMessage()));
+    }
+
+    @ExceptionHandler(ForBidden.class)
+    public ResponseEntity<Map<String, String>> handelForBidden(
+            ForBidden e) {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(Map.of("message", e.getMessage()));
+    }
+
 }

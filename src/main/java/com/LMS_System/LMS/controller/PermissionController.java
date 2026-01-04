@@ -1,13 +1,17 @@
 package com.LMS_System.LMS.controller;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.permission.AddPermissionDto;
+import com.LMS_System.LMS.dto.permission.GetPermissionDto;
+import com.LMS_System.LMS.dto.permission.PermissionResponseDto;
 import com.LMS_System.LMS.service.PermissionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/permission")
@@ -16,13 +20,21 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
-    @GetMapping
-    public List<?> getAllPermissions(){
-        return permissionService.getAllPermission();
+    @GetMapping("/all")
+    public ResponseEntity<List<PermissionResponseDto>> getAllPermissions(){
+
+        return ResponseEntity.ok(permissionService.getAllPermission());
     }
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> addPermission(@RequestBody AddPermissionDto addPermissionDto){
-        return permissionService.addPermission(addPermissionDto);
+    public ResponseEntity<ResponseDto> addPermission(@Valid @RequestBody AddPermissionDto addPermissionDto){
+
+        return ResponseEntity.ok(permissionService.addPermission(addPermissionDto));
+    }
+
+    @GetMapping
+    public ResponseEntity<PermissionResponseDto> getPermission(@Valid @RequestBody GetPermissionDto getPermissionDto){
+
+        return ResponseEntity.ok(permissionService.getPermission(getPermissionDto));
     }
 }

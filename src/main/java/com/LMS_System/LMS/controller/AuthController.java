@@ -2,7 +2,7 @@ package com.LMS_System.LMS.controller;
 
 import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.auth.*;
-import com.LMS_System.LMS.dto.user.UserProfileDto;
+import com.LMS_System.LMS.dto.user.EmailRequestDto;
 import com.LMS_System.LMS.service.UserService;
 import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
@@ -25,9 +25,9 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto){
+    public ResponseEntity<ResponseDto> login(@Valid @RequestBody LoginDto loginDto){
 
-           return userService.login(loginDto);
+           return ResponseEntity.ok(userService.login(loginDto));
 
     }
     @PostMapping("/register")
@@ -46,7 +46,7 @@ public class AuthController {
                 .body(Map.of("message",responseDto));
     }
     @PostMapping("/forget-password")
-    public ResponseEntity<Map<String,ResponseDto>> forgetPassword(@Valid @RequestBody ForgetPasswordDto forgetPassword){
+    public ResponseEntity<Map<String,ResponseDto>> forgetPassword(@Valid @RequestBody EmailRequestDto forgetPassword){
        ResponseDto responseDto= userService.forgetPassword(forgetPassword.getEmail());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("message",responseDto));
@@ -60,8 +60,8 @@ public class AuthController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Map<String,ResponseDto>> deleteUser(@Valid @RequestBody UserProfileDto userProfileDto){
-        ResponseDto responseDto= userService.deleteUserByEmail(userProfileDto);
+    public ResponseEntity<Map<String,ResponseDto>> deleteUser(@Valid @RequestBody EmailRequestDto emailRequestDto){
+        ResponseDto responseDto= userService.deleteUserByEmail(emailRequestDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("message",responseDto));
     }

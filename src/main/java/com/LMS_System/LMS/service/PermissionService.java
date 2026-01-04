@@ -1,45 +1,54 @@
 package com.LMS_System.LMS.service;
 
+import com.LMS_System.LMS.dto.ResponseDto;
 import com.LMS_System.LMS.dto.permission.AddPermissionDto;
+import com.LMS_System.LMS.dto.permission.GetPermissionDto;
+import com.LMS_System.LMS.dto.permission.PermissionResponseDto;
+import com.LMS_System.LMS.exception.NotFound;
 import com.LMS_System.LMS.model.Permission;
 import com.LMS_System.LMS.model.Role;
-import com.LMS_System.LMS.repository.PremissionRepository;
+import com.LMS_System.LMS.repository.PermissionRepository;
 import com.LMS_System.LMS.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 
 public class PermissionService {
 
     @Autowired
-    private PremissionRepository premissionRepository;
+    private PermissionRepository permissionRepository;
 
     @Autowired private RoleRepository roleRepository;
 
     // 1. Add permission
-    public ResponseEntity<Map<String,String>> addPermission(AddPermissionDto addPermissionDto){
-       Permission permission=new Permission();
-       Role role=roleRepository.findById(addPermissionDto.getRole()).orElseThrow(()->new RuntimeException("Role not found"));
+    public ResponseDto addPermission(AddPermissionDto addPermissionDto){
 
+       Role role=roleRepository.findById(addPermissionDto.getRole()).orElseThrow(()->new NotFound("Role not found"));
+
+        Permission permission=new Permission();
        permission.setPermission(addPermissionDto.getPermission());
        permission.setRole(role);
-        premissionRepository.save(permission);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message","Permission saved successfully to the role."));
+        permissionRepository.save(permission);
+        return new ResponseDto("Permission saved successfully to the role.");
     }
 
     // 2. Get all permissions
-    public List<?> getAllPermission(){
+    public List<PermissionResponseDto> getAllPermission(){
 
-        if (premissionRepository.findAll().isEmpty()){
-            return List.of("There's no permission yet.");
-        }
-        return premissionRepository.findAll();
+        List<Permission> permissions= permissionRepository.findAll();
+
+        return permissions.stream().map(permission -> new PermissionResponseDto(permission.getId(),permission.getPermission(),
+                permission.getRole().getId())).toList();
+    }
+
+    public PermissionResponseDto getPermission(GetPermissionDto getPermissionDto){
+        Permission permission=permissionRepository.findById(getPermissionDto.getId()).orElseThrow(()->new NotFound("permission not found"));
+
+        return new PermissionResponseDto(permission.getId()
+                     ,permission.getPermission()
+                     ,permission.getRole().getId());
     }
 }

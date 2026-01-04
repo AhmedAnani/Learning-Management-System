@@ -1,30 +1,21 @@
 package com.LMS_System.LMS.service;
 
+import com.LMS_System.LMS.dto.auth.*;
+import com.LMS_System.LMS.dto.user.EmailRequestDto;
 import com.LMS_System.LMS.dto.user.GetUserResponseDto;
-import com.LMS_System.LMS.dto.user.UserProfileDto;
-import com.LMS_System.LMS.exception.ConflictHandling;
-import com.LMS_System.LMS.exception.GateWayTimeOut;
-import com.LMS_System.LMS.exception.NotAcceptable;
-import com.LMS_System.LMS.exception.NotFound;
+import com.LMS_System.LMS.exception.*;
 import com.LMS_System.LMS.dto.ResponseDto;
-import com.LMS_System.LMS.dto.auth.LoginDto;
-import com.LMS_System.LMS.dto.auth.RegisterDto;
 import com.LMS_System.LMS.component.JwtUtil;
-import com.LMS_System.LMS.dto.auth.ResetPasswordDto;
-import com.LMS_System.LMS.dto.auth.VerifyOtpDto;
 import com.LMS_System.LMS.model.User;
 import com.LMS_System.LMS.repository.RoleRepository;
 import com.LMS_System.LMS.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -133,17 +124,11 @@ public class UserService {
 
     // 5. Login
 
-    public ResponseEntity<Map<String, ?>> login(LoginDto loginDto) {
+    public ResponseDto login(LoginDto loginDto) {
 
         // 1. Basic validation
-        if (loginDto.getEmail() == null || loginDto.getEmail().isBlank()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "Email is required"));
-        }
-
-        if (loginDto.getPassword() == null || loginDto.getPassword().isBlank()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "Password is required"));
+        if (loginDto.getEmail() == null || loginDto.getEmail().isBlank()||loginDto.getPassword() == null || loginDto.getPassword().isBlank()) {
+            throw new BadRequestException("Email or password is required");
         }
 
         // 2. Find user
@@ -151,39 +136,30 @@ public class UserService {
 
         // Security best practice: do not reveal which field is wrong
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Invalid email or password"));
+            throw new UnAuthorized("Invalid email or password");
         }
 
         // 3. Check verification
         if (!user.isVerified()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("message", "Account not verified. Please verify your email."));
+            throw new ForBidden("Account not verified. Please verify your email.");
         }
 
         // 4. Check password
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Invalid email or password"));
+            throw new UnAuthorized("Invalid email or password");
         }
 
         // 5. Generate JWT
         String token = jwtUtil.generateToken(user.getEmail());
 
         // 6. Build response
-        return ResponseEntity.ok(
-                Map.of(
-                        "token", token,
-                        "type", "Bearer",
-                        "expiresIn", "1 Hour"
-                )
-        );
+        return new ResponseDto(token);
+
     }
 
     // 6. Get user profile
-
-    public GetUserResponseDto userProfile(String email){
-        User user=userRepo.findByEmail(email);
+    public GetUserResponseDto userProfile(EmailRequestDto emailRequestDto){
+        User user=userRepo.findByEmail(emailRequestDto.getEmail());
         if (user==null){
             throw new NotFound("User not found. Please create an account.");
         }
@@ -206,8 +182,8 @@ public class UserService {
                 )).toList();
     }
     // Delete user by userEmail
-    public ResponseDto deleteUserByEmail(UserProfileDto userProfileDto){
-        User user=userRepo.findByEmail(userProfileDto.getEmail());
+    public ResponseDto deleteUserByEmail(EmailRequestDto emailRequestDto){
+        User user=userRepo.findByEmail(emailRequestDto.getEmail());
         if(user==null) {
             throw new NotFound("User not found");
         }

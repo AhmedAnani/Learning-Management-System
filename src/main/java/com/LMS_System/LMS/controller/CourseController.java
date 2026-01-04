@@ -27,7 +27,7 @@ public class CourseController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity< List<GetCourseResponseDto>> getCoursesByAuthorName(GetCourseDto getCourseDto) {
+    public ResponseEntity< List<GetCourseResponseDto>> getCoursesByAuthorName(@Valid @RequestBody GetCourseDto getCourseDto) {
 
         return  ResponseEntity.ok(courseService.getMyCourses(getCourseDto));
 

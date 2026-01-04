@@ -1,6 +1,5 @@
-package com.LMS_System.LMS.dto.course;
+package com.LMS_System.LMS.dto.permission;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetCourseDto {
-    @NotBlank
+public class PermissionResponseDto {
+
     private int id;
 
-    @NotBlank
-    private String author;
+    private String permission;
+
+    private int roleId;
 }

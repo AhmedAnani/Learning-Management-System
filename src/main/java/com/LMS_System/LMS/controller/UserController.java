@@ -1,17 +1,17 @@
 package com.LMS_System.LMS.controller;
 
 
+import com.LMS_System.LMS.dto.ResponseDto;
+import com.LMS_System.LMS.dto.user.EmailRequestDto;
 import com.LMS_System.LMS.dto.user.GetUserResponseDto;
 import com.LMS_System.LMS.service.UserService;
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @NoArgsConstructor
@@ -21,12 +21,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/profile")
-    public ResponseEntity<Map<String, GetUserResponseDto>> userprofile(Authentication authentication ){
-        GetUserResponseDto responseDto=userService.userProfile(authentication.getName());
+    @GetMapping
+    public ResponseEntity< GetUserResponseDto> userprofile(@Valid @RequestBody EmailRequestDto emailRequestDto){
+        GetUserResponseDto responseDto=userService.userProfile(emailRequestDto);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("profile:",responseDto));
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/allUsers")
@@ -36,6 +35,10 @@ public class UserController {
 
     }
 
+    @DeleteMapping
+    public ResponseEntity<ResponseDto> deleteUser(@Valid @RequestBody EmailRequestDto emailRequestDto){
+        return ResponseEntity.ok(userService.deleteUserByEmail(emailRequestDto));
+    }
 
 
 

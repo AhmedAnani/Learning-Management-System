@@ -25,7 +25,6 @@ public class RegisterDto {
 
     @NotBlank
     @Email
-    @NotNull
     private String email;
 
     @NotBlank
@@ -33,7 +32,6 @@ public class RegisterDto {
 
     @NotBlank
     @Size(min = 8)
-    @NotNull
     private String password;
 
     

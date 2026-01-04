@@ -29,7 +29,7 @@ public class QuizController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseDto> deleteQuiz(@RequestBody GetQuizDto getQuizDto){
+    public ResponseEntity<ResponseDto> deleteQuiz(@Valid @RequestBody GetQuizDto getQuizDto){
 
         return ResponseEntity.ok(quizService.deleteQuiz(getQuizDto));
     }

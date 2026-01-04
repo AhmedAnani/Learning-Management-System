@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
                 .body(Map.of("message", e.getMessage()));
     }
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Map<String, String>> handelBadRequest(
+    public ResponseEntity<Map<String, String>> handleBadRequest(
             BadRequestException e) {
 
         return ResponseEntity
@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnAuthorized.class)
-    public ResponseEntity<Map<String, String>> handelUnAuthorized(
+    public ResponseEntity<Map<String, String>> handleUnAuthorized(
             UnAuthorized e) {
 
         return ResponseEntity
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ForBidden.class)
-    public ResponseEntity<Map<String, String>> handelForBidden(
+    public ResponseEntity<Map<String, String>> handleForBidden(
             ForBidden e) {
 
         return ResponseEntity

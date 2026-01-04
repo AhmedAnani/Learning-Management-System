@@ -29,7 +29,7 @@ public class VideoService {
     // 1. Add video
     public ResponseDto addVideo(AddVideoDto addVideoDto){
 
-        Content content=contentRepository.findById(addVideoDto.getContentId()).orElseThrow(()->new NotFound("Content not fond"));
+        Content content=contentRepository.findById(addVideoDto.getContentId()).orElseThrow(()->new NotFound("Content not found"));
 
         Video video= new Video();
         video.setPath(addVideoDto.getPath());
@@ -43,7 +43,7 @@ public class VideoService {
 
     // 2. Get video
     public VideoResponseDto getVideo(GetVideoDto getVideoDto){
-        Video video=videoRepository.findById(getVideoDto.getVideoId()).orElseThrow(()->new NotFound("Video not fond"));
+        Video video=videoRepository.findById(getVideoDto.getVideoId()).orElseThrow(()->new NotFound("Video not found"));
 
 
         return new VideoResponseDto(video.getId(),
@@ -53,7 +53,7 @@ public class VideoService {
 
     // 3. Delete video
     public ResponseDto deleteVideo(GetVideoDto getVideoDto){
-        Video video=videoRepository.findById(getVideoDto.getVideoId()).orElseThrow(()->new NotFound("Video not fond"));
+        Video video=videoRepository.findById(getVideoDto.getVideoId()).orElseThrow(()->new NotFound("Video not found"));
 
         videoRepository.delete(video);
         return new ResponseDto("Video deleted successfully.");

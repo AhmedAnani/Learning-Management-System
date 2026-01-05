@@ -6,13 +6,13 @@ import com.LMS_System.LMS.dto.content.*;
 import com.LMS_System.LMS.dto.quiz.QuizResponseDto;
 import com.LMS_System.LMS.dto.video.VideoResponseDto;
 import com.LMS_System.LMS.exception.NotFound;
-import com.LMS_System.LMS.model.Content;
-import com.LMS_System.LMS.model.Section;
+import com.LMS_System.LMS.model.*;
 import com.LMS_System.LMS.repository.ContentRepository;
 import com.LMS_System.LMS.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,35 +40,41 @@ public class ContentService {
             Content content=contentRepository.findById(getContentDto.getContentId()).orElseThrow(()->new NotFound("Content not found"));
 
 
+        Set<VideoResponseDto> videoDto = new HashSet<>();
+        for (Video v : content.getVideos()) {
+            videoDto.add(new VideoResponseDto(
+                    v.getId(),
+                    v.getPath(),
+                    v.getName()
+            ));
+        }
+
+        Set<ArticleResponseDto> articleDto = new HashSet<>();
+        for (Article a : content.getArticles()) {
+            articleDto.add(new ArticleResponseDto(
+                    a.getId(),
+                    a.getName(),
+                    a.getDescription(),
+                    a.getCreationTime()
+            ));
+        }
+
+        Set<QuizResponseDto> quizDto = new HashSet<>();
+        for (Quiz q : content.getQuizzes()) {
+            quizDto.add(new QuizResponseDto(
+                    q.getId(),
+                    q.getName(),
+                    q.getQuestions(),
+                    q.getCreationTime()
+            ));
+        }
         return new ContentResponseDto(content.getId(),
                                         content.getName(),
                                         content.getSection().getId(),
-                                        content.getVideos()
-                                                .stream()
-                                                .map(v -> new VideoResponseDto(
-                                                        v.getId(),
-                                                        v.getPath(),
-                                                        v.getName()
-                                                ))
-                                                .collect(Collectors.toSet()),
-                                        content.getArticles()
-                                                .stream()
-                                                .map(a -> new ArticleResponseDto(
-                                                        a.getId(),
-                                                        a.getName(),
-                                                        a.getDescription(),
-                                                        a.getCreationTime()
-                                                ))
-                                                .collect(Collectors.toSet()),
-                                        content.getQuizzes()
-                                                .stream()
-                                                .map(q -> new QuizResponseDto(
-                                                        q.getId(),
-                                                        q.getName(),
-                                                        q.getQuestions(),
-                                                        q.getCreationTime()
-                                                ))
-                                                .collect(Collectors.toSet()));
+                                        videoDto,
+                                        articleDto,
+                                        quizDto
+                                      );
 
     }
 

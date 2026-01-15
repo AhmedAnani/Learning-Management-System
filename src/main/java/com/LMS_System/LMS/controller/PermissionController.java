@@ -8,6 +8,7 @@ import com.LMS_System.LMS.service.PermissionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/permission")
+@Validated
 public class PermissionController {
 
     @Autowired

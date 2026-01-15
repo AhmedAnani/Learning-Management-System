@@ -8,6 +8,7 @@ import com.LMS_System.LMS.service.VideoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/video")
+@Validated
 public class VideoController {
 
     @Autowired
